@@ -1,0 +1,36 @@
+
+# Crash log files
+crash.log
+crash.*.log
+
+kubeconfig
+**/kubeconfig
+
+.docker/
+.env
+.completion
+# Ignore everything in this directory
+#*
+# Except this file
+#!.gitignore
+
+kind
+kubectl
+.env
+*/.start.time
+kubeconfig.*
+kubeconfig
+
+bin/
+my_helm_cache_dir/
+my_helm_config_dir/
+
+
+helm-v3.13.1-linux-amd64.tar.gz
+linux-amd64/
+
+
+.gcloud-config/
+gcp-credentials.json
+
+bucketname.txt

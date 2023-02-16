@@ -1,0 +1,35 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: mysqlinstance-default
+  labels:
+    crossplane.io/xrd: mysqlinstances.demo.crossplane.io
+spec:
+  compositeTypeRef:
+    apiVersion: demo.crossplane.io/v1alpha1
+    kind: MySQLInstance
+
+  mode: Pipeline
+
+  pipeline:
+    - step: apply-defaults
+      functionRef:
+        name: function-hello
+
+    - step: render
+      type: Render
+      # a simple example: one managed resource
+      resources:
+        db:
+          base:
+            apiVersion: gcp.upbound.io/v1beta1
+            kind: SQLInstance
+            metadata:
+              labels: {}
+            spec:
+              forProvider:
+                region: us-central1
+                databaseVersion: MYSQL_8_0
+                settings:
+                  tier: db-f1-micro
+

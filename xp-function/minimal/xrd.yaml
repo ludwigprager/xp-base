@@ -1,0 +1,27 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: mysqlinstances.demo.crossplane.io
+spec:
+  group: demo.crossplane.io
+  names:
+    kind: MySQLInstance
+    plural: mysqlinstances
+  claimNames:
+    kind: MySQL
+    plural: mysql
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            parameters:
+              type: object
+              properties:
+                size:
+                  type: string
+                  default: small
+

@@ -1,0 +1,9 @@
+https://marketplace.upbound.io/providers/upbound/provider-family-gcp/v2.2.0
+
+---
+
+wget https://go.dev/dl/go1.25.4.linux-amd64.tar.gz
+
+mkdir go-local
+tar -C go-local -xzf ./go1.25.4.linux-amd64.tar.gz --strip-components=1
+

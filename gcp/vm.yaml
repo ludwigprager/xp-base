@@ -1,0 +1,19 @@
+apiVersion: compute.gcp.upbound.io/v1beta1
+kind: Instance
+metadata:
+  name: demo-vm
+spec:
+  forProvider:
+    machineType: e2-micro
+    zone: europe-west1-b
+    disks:
+      - type: PERSISTENT
+        boot: true
+        autoDelete: true
+        initializeParams:
+          sourceImage: projects/debian-cloud/global/images/family/debian-12
+    networkInterfaces:
+      - network: default
+  providerConfigRef:
+    name: gcp
+
