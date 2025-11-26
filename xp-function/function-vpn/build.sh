@@ -5,7 +5,6 @@ set -eu
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $BASEDIR
 
-source ../../set-env.sh
 source ../../.env
 
 function go-in-docker() {
@@ -19,24 +18,6 @@ function go-in-docker() {
     golang:1.24.9 \
     $command
 }
-
-#if [[ ! -f go.mod ]]; then
-#  go-in-docker go mod init wg-config
-#fi
-
-#if [[ ! -f go.sum ]]; then
-#  go-in-docker go get \
-#    gopkg.in/yaml.v2 \
-#    github.com/davecgh/go-spew/spew \
-#    golang.zx2c4.com/wireguard/wgctrl/wgtypes
-#fi
-
-#go-in-docker go build main.go
-#go-in-docker gofmt -w main.go
-
-
-#mkdir -p config-files
-#go-in-docker ./main config-files
 
 # Run code generation - see input/generate.go
 go-in-docker go generate ./...

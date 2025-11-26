@@ -4,7 +4,6 @@ set -eu
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $BASEDIR
 
-source set-env.sh
 source .env
 
 ./xp-function/function-vpn/build.sh 
@@ -28,3 +27,9 @@ kubectl get sqlinstance
 kubectl describe sqlinstance <name>
 kubectl logs -l pkg.crossplane.io/function=function-hello -n crossplane-system
 '
+
+kubectl apply -f xp-function/v2/xrd.yaml
+kubectl apply -f xp-function/v2/functiondefinition.yaml
+#kubectl apply -f xp-function/v2/composition.yaml
+#kubectl apply -f xp-function/v2/claim.yaml
+

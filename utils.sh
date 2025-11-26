@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 
 
+#function go-in-docker() {
+#  local command="$*"
+#
+#    #-v $(pwd):/work/ \
+#
+#  docker run -ti --rm \
+#    -w /work \
+#    -v $BASEDIR/:/work/ \
+#    -e GOMODCACHE=/work/go/ \
+#    -e GOCACHE=/work/go/build-cache \
+#    golang:1.24.9 \
+#    $command
+#}
+#export -f go-in-docker
 
 
 function my-helm() {

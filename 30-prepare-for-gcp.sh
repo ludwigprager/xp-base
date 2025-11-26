@@ -6,7 +6,7 @@ cd $BASEDIR
 
 
 
-source set-env.sh
+source .env
 
 mkdir -p .gcloud-config
 
@@ -86,7 +86,6 @@ JSON_FILE="./gcp-credentials.json"
 ./gcloud.sh iam service-accounts keys create /workspace/${JSON_FILE} \
   --iam-account="${SA_EMAIL}"
 
-source .env
 
 # Variables
 NAMESPACE="upbound-system"

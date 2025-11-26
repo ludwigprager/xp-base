@@ -8,7 +8,6 @@ KUBECTL_VERSION=${1:-1.30.2}
 NODE_VERSION=${2:-1.30.0}
 
 source set-env.sh
-source utils.sh
 
 mkdir -p ./bin
 
@@ -37,6 +36,8 @@ fi
 
 export BASEDIR
 envsubst < env.tpl > .env
+cat set-env.sh >> .env
+cat utils.sh >> .env
 source .env
 
 kubectl completion bash | sed 's/kubectl/k/g' >> .env

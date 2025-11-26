@@ -1,0 +1,10 @@
+apiVersion: pkg.crossplane.io/v1beta1
+kind: Function
+metadata:
+  name: function-xbuckets
+spec:
+# package: xpkg.upbound.io/crossplane-contrib/function-xbuckets:v0.6.0
+# package: function-vpn
+
+  package: "docker.io/example/function-vpn:dev" # dummy valid image
+
