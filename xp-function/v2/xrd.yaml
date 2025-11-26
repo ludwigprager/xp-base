@@ -32,7 +32,7 @@ spec:
     kind: XBucket
     plural: xbuckets
   versions:
-    - name: v1alpha1
+    - name: v1
       served: true
       referenceable: true
       schema:
@@ -41,6 +41,9 @@ spec:
           properties:
             spec:
               type: object
-            status:
-              type: object
+              properties:
+                bucketName:
+                  type: string
+#           status:
+#             type: object
 

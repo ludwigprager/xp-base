@@ -14,6 +14,19 @@
 #    golang:1.24.9 \
 #    $command
 #}
+
+#function go-in-docker() {
+#  local command="$*"
+#
+#  docker run -ti --rm \
+#    -w /work \
+#    -v $(pwd):/work/ \
+#    -v ${XP_BASE_ROOT}:/work/go/ \
+#    -e GOMODCACHE=/work/go/ \
+#    -e GOCACHE=/work/go/build-cache \
+#    golang:1.24.9 \
+#    $command
+#}
 #export -f go-in-docker
 
 
@@ -107,7 +120,7 @@ export -f get-primary-ip
 
 function kind-cluster-exists() {
   local cluster_name=$1
-  local KIND=${BASEDIR}/bin/kind
+  local KIND=${XP_BASE_ROOT}/bin/kind
 
 #echo KIND: $KIND
 #echo cluster_name: $cluster_name

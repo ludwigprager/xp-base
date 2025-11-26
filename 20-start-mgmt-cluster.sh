@@ -35,6 +35,7 @@ if [[ ! -f ./bin/kind ]]; then
 fi
 
 export BASEDIR
+export XP_BASE_ROOT=$(git rev-parse --show-toplevel)
 envsubst < env.tpl > .env
 cat set-env.sh >> .env
 cat utils.sh >> .env
