@@ -36,6 +36,9 @@ fi
 
 export BASEDIR
 export XP_BASE_ROOT=$(git rev-parse --show-toplevel)
+export HOSTNAME=$(hostname)
+export HOST_IP=$(ip addr show docker0 | grep -Po 'inet \K[\d.]+')
+
 envsubst < env.tpl > .env
 cat set-env.sh >> .env
 cat utils.sh >> .env
@@ -44,11 +47,12 @@ source .env
 kubectl completion bash | sed 's/kubectl/k/g' >> .env
 test -f /etc/bash_completion && cat /etc/bash_completion >> .env
 
+
 if ! kind-cluster-exists $CLUSTER; then
   echo "Creating management cluster"
 
-# curl -LO https://raw.githubusercontent.com/cilium/cilium/1.15.6/Documentation/installation/kind-config.yaml 
-kind create cluster \
+  # curl -LO https://raw.githubusercontent.com/cilium/cilium/1.15.6/Documentation/installation/kind-config.yaml 
+  kind create cluster \
     -n $CLUSTER \
     --config kind.config \
     --image kindest/node:v${NODE_VERSION}
@@ -78,4 +82,5 @@ fi
 echo "Waiting for crossplane to get available"
 ./bin/kubectl wait --for=condition=available --timeout=300s \
   deployment/crossplane -n crossplane-system
+
 

@@ -6,7 +6,16 @@ cd $BASEDIR
 
 source .env
 
-./xp-function/function-vpn/build.sh 
+
+docker compose  -f container/docker-compose.yaml up -d
+
+./container/build-and-push.sh
+
+
+#./xp-function/function-vpn/build.sh 
+
+#docker push ${REGISTRY}/ludwigprager/runtime:1.0
+
 
 kubectl apply -f xp-function/v2/xrd.yaml
 kubectl apply -f xp-function/v2/functiondefinition.yaml

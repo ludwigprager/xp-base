@@ -19,7 +19,7 @@ function go-in-docker() {
     $command
 }
 
-TAG=docker.io/ludwigprager/runtime:1.0
+TAG=${REGISTRY_FQDN}/ludwigprager/runtime:1.0
 
 # Run code generation - see input/generate.go
 go-in-docker go generate ./...
@@ -28,10 +28,12 @@ go-in-docker go generate ./...
 # go-in-docker go test ./...
 
 # Build the function's runtime image - see Dockerfile
-docker build . --tag=$TAG
+#docker build . --tag=$TAG
+
+../../container/build-and-push.sh
 
 # Build a function package - see package/crossplane.yaml
 crossplane xpkg build -f package --embed-runtime-image=$TAG
 
-kind load docker-image $TAG --name $CLUSTER
+#kind load docker-image $TAG --name $CLUSTER
 

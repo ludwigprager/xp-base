@@ -11,3 +11,5 @@ export HELM_CONFIG_HOME=$XP_BASE_ROOT/my_helm_config_dir
 export KUBECONFIG=$XP_BASE_ROOT/kubeconfig
 
 #PATH=$XP_BASE_ROOT/functions-demo/go-local/bin/:$PATH
+
+HOSTNAME=${HOSTNAME}.g1

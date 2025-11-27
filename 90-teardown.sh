@@ -14,6 +14,9 @@ set +e
 
 #./k3d cluster delete $CLUSTER || true
 
+docker compose  -f container/docker-compose.yaml down
+
+
 echo "Deleting the bucket"
 export BUCKETNAME=$(cat ./bucketname.txt)
 envsubst < gcp/bucket.tpl | ./bin/kubectl delete -f -

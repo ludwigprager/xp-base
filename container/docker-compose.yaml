@@ -1,0 +1,48 @@
+services:
+  registry:
+    image: registry:2
+    container_name: local-registry
+    ports:
+      - "5001:5000"   # Exposed on host port 5001
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+    volumes:
+      - ./registry-data:/var/lib/registry
+    restart: unless-stopped
+
+
+  proxy:
+    image: nginx:alpine
+    container_name: registry-proxy
+    depends_on:
+      - registry
+    ports:
+      - "80:80"       # Expose portless FQDN via standard HTTPS port
+    volumes:
+      - ./registry-proxy.conf:/etc/nginx/nginx.conf:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+
+
+
+  # Docker-in-Docker builder
+  builder:
+    image: docker:24-dind
+    container_name: builder
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR=""
+#   command: ["--insecure-registry", "registry.g1:5000"]
+    volumes:
+      - ../:/work   # Workspace for builds
+      - ./dind-data:/var/lib/docker
+      - ./daemon.json:/etc/docker/daemon.json:ro  # Mount insecure registry config
+    working_dir: /work
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    extra_hosts:
+      - "registry.g1:host-gateway"
+

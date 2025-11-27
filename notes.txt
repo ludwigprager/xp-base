@@ -7,3 +7,53 @@ wget https://go.dev/dl/go1.25.4.linux-amd64.tar.gz
 mkdir go-local
 tar -C go-local -xzf ./go1.25.4.linux-amd64.tar.gz --strip-components=1
 
+
+---
+
+kubectl -n kube-system get configmap coredns -o yaml > coredns.yaml
+sed -i '/^.:53 {/a \
+    hosts {\n        172.18.0.1 registry.g1\n        fallthrough\n    }' coredns.yaml
+
+
+kubectl -n kube-system apply -f coredns.yaml
+
+---
+
+kubectl -n kube-system edit configmap coredns
+
+---
+
+
+.:53 {
+    errors
+    health { lameduck 5s }
+    ready
+    hosts {
+        172.18.0.1 registry.g1
+        fallthrough
+    }
+    kubernetes cluster.local in-addr.arpa ip6.arpa {
+       pods insecure
+       fallthrough in-addr.arpa ip6.arpa
+       ttl 30
+    }
+    forward . /etc/resolv.conf {
+       max_concurrent 1000
+    }
+    cache 30
+    loop
+    reload
+    loadbalance
+}
+
+---
+
+kubectl -n kube-system describe configmap coredns
+
+
+---
+ 2069  kubectl -n kube-system rollout restart deployment coredns
+ 2070  kubectl -n kube-system get pods -l k8s-app=kube-dns
+ 2071  kubectl run -i --tty --rm testpod --image=busybox --restart=Never -- sh
+nslookup registry.g1
+
