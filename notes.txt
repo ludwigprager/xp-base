@@ -52,8 +52,7 @@ kubectl -n kube-system describe configmap coredns
 
 
 ---
- 2069  kubectl -n kube-system rollout restart deployment coredns
- 2070  kubectl -n kube-system get pods -l k8s-app=kube-dns
- 2071  kubectl run -i --tty --rm testpod --image=busybox --restart=Never -- sh
-nslookup registry.g1
+kubectl -n kube-system rollout restart deployment coredns
+kubectl -n kube-system get pods -l k8s-app=kube-dns
+kubectl run -i --tty --rm testpod --image=busybox --restart=Never -- nslookup registry.g1
 

@@ -84,3 +84,15 @@ echo "Waiting for crossplane to get available"
   deployment/crossplane -n crossplane-system
 
 
+# update coredns corefile
+
+# kubectl -n kube-system get configmap coredns -o yaml | yq .data.Corefile > Corefile
+kubectl -n kube-system create configmap coredns \
+  --from-file=Corefile=Corefile \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl -n kube-system rollout restart deployment coredns
+kubectl -n kube-system get pods -l k8s-app=kube-dns
+kubectl run -i --tty --rm testpod --image=busybox --restart=Never -- nslookup registry.g1
+
+
