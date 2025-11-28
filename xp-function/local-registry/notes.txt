@@ -1,0 +1,72 @@
+
+docker exec -ti builder docker pull registry.g1/alpine:latest
+
+
+---
+
+Test certificate trust from inside builder
+
+docker exec -ti builder ls /etc/docker/certs.d/registry.g1/
+docker exec -ti builder cat /etc/docker/certs.d/registry.g1/ca.crt
+
+Then:
+
+docker exec -ti builder apk add --no-cache curl
+docker exec -ti builder curl -v https://registry.g1/v2/
+
+---
+
+docker exec -ti cb-lprager-worker curl https://registry.g1
+
+---
+
+# Verify
+
+kubectl run -i --tty --rm testpod --image=alpine -- sh
+
+# Then inside the pod:
+
+apk add --no-cache curl ca-certificates
+curl https://registry.g1/v2/_catalog
+
+# Expected output:
+
+{"repositories":["ludwigprager/runtime"]}
+
+
+---
+
+Mutating Admission Webhook (preferred for transient pods)
+
+A mutating webhook can automatically inject a volume mount and init container into any pod that needs to trust your self-signed registry.
+How it works:
+
+    You create a ConfigMap with your CA (as before):
+
+kubectl -n crossplane-system create configmap registry-ca --from-file=ca.crt=./docker-certs/registry.g1/ca.crt
+
+    Write a mutating webhook that:
+
+        Detects pods in namespaces where Crossplane functions run
+
+        Adds:
+
+            A volume mount: /usr/local/share/ca-certificates/registry-ca.crt
+
+            An init container that runs update-ca-certificates (Alpine/Debian as needed)
+
+    The webhook ensures every transient pod gets the CA installed automatically.
+
+    Pros: works for all transient pods, fully automatic
+
+    Cons: more complex to set up (need TLS, webhook deployment, proper RBAC)
+
+Reference: Kubernetes Mutating Admission Webhook
+https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/
+
+---
+
+kubectl -n crossplane-system create configmap registry-ca --from-file=ca.crt=certs/registry.g1/myCA.crt
+
+
+
