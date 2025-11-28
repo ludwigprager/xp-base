@@ -7,7 +7,7 @@ cd $BASEDIR
 source .env
 
 
-docker compose  -f container/docker-compose.yaml up -d
+docker compose  -f xp-function/local-registry/docker-compose.yaml up -d
 
 ./container/build-and-push.sh
 

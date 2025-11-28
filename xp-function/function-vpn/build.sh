@@ -30,7 +30,7 @@ go-in-docker go generate ./...
 # Build the function's runtime image - see Dockerfile
 #docker build . --tag=$TAG
 
-../../container/build-and-push.sh
+../local-registry/build-and-push.sh
 
 # Build a function package - see package/crossplane.yaml
 crossplane xpkg build -f package --embed-runtime-image=$TAG

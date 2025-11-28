@@ -14,7 +14,7 @@ set +e
 
 #./k3d cluster delete $CLUSTER || true
 
-docker compose  -f container/docker-compose.yaml down
+docker compose  -f xp-function/local-registry/docker-compose.yaml down
 
 
 echo "Deleting the bucket"
