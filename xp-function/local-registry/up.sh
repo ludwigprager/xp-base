@@ -5,6 +5,7 @@ BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $BASEDIR
 
 source ../../set-env.sh
+source ../../.env
 
 mkdir -p certs/${REGISTRY_FQDN}
 
@@ -39,7 +40,61 @@ kubectl create configmap registry-ca \
 
 # 2. patch deployment
 
-kubectl patch deployment crossplane -n crossplane-system --type='json' -p='[
+# 1️⃣ Add the volume if it doesn’t exist
+if ! kubectl get deployment crossplane -n crossplane-system -o json | \
+    jq -e '.spec.template.spec.volumes[]? | select(.name=="registry-ca")' >/dev/null; then
+  kubectl patch deployment crossplane -n crossplane-system --type=json -p='[
+    {
+      "op": "add",
+      "path": "/spec/template/spec/volumes/-",
+      "value": {
+        "name": "registry-ca",
+        "configMap": {
+          "name": "registry-ca"
+        }
+      }
+    }
+  ]'
+fi
+
+
+# 2️⃣ Add the volumeMount if it doesn’t exist
+if ! kubectl get deployment crossplane -n crossplane-system -o json | \
+    jq -e '.spec.template.spec.containers[0].volumeMounts[]? | select(.name=="registry-ca")' >/dev/null; then
+  kubectl patch deployment crossplane -n crossplane-system --type=json -p='[
+    {
+      "op": "add",
+      "path": "/spec/template/spec/containers/0/volumeMounts/-",
+      "value": {
+        "name": "registry-ca",
+        "mountPath": "/etc/ssl/certs/extra-ca.crt",
+        "subPath": "ca.crt"
+      }
+    }
+  ]'
+fi
+
+
+# 3️⃣ Add the environment variable if it doesn’t exist
+if ! kubectl get deployment crossplane -n crossplane-system -o json | \
+    jq -e '.spec.template.spec.containers[0].env[]? | select(.name=="SSL_CERT_FILE")' >/dev/null; then
+  kubectl patch deployment crossplane -n crossplane-system --type=json -p='[
+    {
+      "op": "add",
+      "path": "/spec/template/spec/containers/0/env/-",
+      "value": {
+        "name": "SSL_CERT_FILE",
+        "value": "/etc/ssl/certs/extra-ca.crt"
+      }
+    }
+  ]'
+fi
+
+
+exit
+
+#kubectl patch deployment crossplane -n crossplane-system --type='json' -p='[
+kubectl patch deployment crossplane -n crossplane-system --type=merge -p='[
   {
     "op": "add",
     "path": "/spec/template/spec/volumes/-",
