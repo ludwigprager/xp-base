@@ -2,6 +2,10 @@ https://marketplace.upbound.io/providers/upbound/provider-family-gcp/v2.2.0
 
 git clone -o g1 http://lyra.g1:3000/lprager/xp-base.git
 
+git remote add github https://github.com/ludwigprager/xp-base.git 
+git remote add g1 http://lyra.g1:3000/lprager/xp-base.git
+
+
 ---
 
 wget https://go.dev/dl/go1.25.4.linux-amd64.tar.gz
