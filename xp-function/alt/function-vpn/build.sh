@@ -31,9 +31,15 @@ go-in-docker go generate ./...
 #docker build . --tag=$TAG
 
 ../local-registry/build-and-push.sh
+docker build --tag=$REGISTRY_FQDN/ludwigprager/runtime:1.0 .
+
 
 # Build a function package - see package/crossplane.yaml
 crossplane xpkg build -f package --embed-runtime-image=$TAG
 
 #kind load docker-image $TAG --name $CLUSTER
 
+
+crossplane xpkg build -f package --embed-runtime-image=$TAG -o bla.xpkg
+#crossplane xpkg build -f package --embed-runtime-image=$TAG -o - | \
+#  crossplane xpkg push registry.g1/function-xbuckets:1.0 -

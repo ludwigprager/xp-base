@@ -8,6 +8,9 @@ source .env
 
 
 ./xp-function/local-registry/up.sh
+
+exit
+
 ./xp-function/local-registry/build-and-push.sh
 
 kubectl apply -f xp-function/v2/xrd.yaml

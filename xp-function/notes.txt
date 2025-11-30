@@ -12,3 +12,14 @@ crossplane xpkg init function-vpn function-template-go -d function-vpn
 4. Add tests for your logic in `fn_test.go`
 5. Update `README.md`, to be about your function!
 
+
+---
+
+crossplane render v2/claim.yaml v2/composition.yaml  v2/functiondefinition.yaml 
+
+---
+
+python3 -m venv $(realpath .)
+source bin/activate
+pip install hatch
+

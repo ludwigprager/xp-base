@@ -1,7 +1,10 @@
 
 CLUSTER="cb-$(whoami)"
 #PS1="[xp-base ${GCB:-undefined} ]\$ "
-PS1="[xp-base]\$ "
+#PS1="[xp-base]\$ "
+
+export PS1='$(if [[ $PWD == $XP_BASE_ROOT ]]; then printf "[ ]"; elif [[ $PWD == $XP_BASE_ROOT/* ]]; then printf "[ %s ]" "${PWD#$XP_BASE_ROOT/}"; else printf "%s" "\w"; fi)\$ '
+
 
 # local registry name
 #REGISTRY=xp-base.io

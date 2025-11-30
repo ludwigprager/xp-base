@@ -27,3 +27,85 @@ done
 # cp self-signed-certificate/registry.g1.* certs/
 
 docker compose up -d
+
+# making the Crossplane controller trust a private registry
+# 1. Create a ConfigMap with your CA:
+
+# TODO:
+kubectl delete configmap registry-ca -n crossplane-system || true
+kubectl create configmap registry-ca \
+  --from-file=ca.crt=certs/registry.g1/myCA.crt \
+  -n crossplane-system
+
+# 2. patch deployment
+
+kubectl patch deployment crossplane -n crossplane-system --type='json' -p='[
+  {
+    "op": "add",
+    "path": "/spec/template/spec/volumes/-",
+    "value": {
+      "name": "registry-ca",
+      "configMap": {
+        "name": "registry-ca"
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/volumeMounts/-",
+    "value": {
+      "name": "registry-ca",
+      "mountPath": "/etc/ssl/certs/extra-ca.crt",
+      "subPath": "ca.crt"
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/env/-",
+    "value": {
+      "name": "SSL_CERT_FILE",
+      "value": "/etc/ssl/certs/extra-ca.crt"
+    }
+  }
+]'
+exit
+
+kubectl patch deployment crossplane -n crossplane-system --type='merge' -p '{
+  "spec": {
+    "template": {
+      "spec": {
+        "volumes": [
+          {
+            "name": "registry-ca",
+            "configMap": {
+              "name": "registry-ca"
+            }
+          }
+        ],
+        "containers": [
+          {
+            "name": "crossplane",
+            "volumeMounts": [
+              {
+                "name": "registry-ca",
+                "mountPath": "/etc/ssl/certs/extra-ca.crt",
+                "subPath": "ca.crt"
+              }
+            ],
+            "env": [
+              {
+                "name": "SSL_CERT_FILE",
+                "value": "/etc/ssl/certs/extra-ca.crt"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}'
+
+
+exit
+
+

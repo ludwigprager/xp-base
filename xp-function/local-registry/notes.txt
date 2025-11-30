@@ -70,3 +70,8 @@ kubectl -n crossplane-system create configmap registry-ca --from-file=ca.crt=cer
 
 
 
+---
+
+curl -k https://registry.g1/v2/_catalog
+curl -k https://registry.g1/v2/ludwigprager/runtime/tags/list
+
