@@ -2,6 +2,24 @@
 
 Welcome to **xp-base**, a bootstrap-style repository to help you quickly get started with Crossplane projects — including support for xp-functions. With this repo you can deploy a minimal working infrastructure on Google Cloud Platform (GCP), making it easier to experiment with Crossplane, manage cloud resources, and test out xp-functions in a controlled, script-driven environment.
 
+# TL;DR
+
+Install docker compose and podman, choose a GCP project which can be empty.
+
+```
+# clone the repo
+git clone https://github.com/ludwigprager/xp-base.git 
+```
+
+# tell me your GCP project id:
+export XP_BASE_GCP_PROJECT=my-gcp-project-123456
+
+```
+# execute the deployment
+./xp-base/10-deploy.sh
+```
+
+
 ---
 
 ## ✅ Goals
