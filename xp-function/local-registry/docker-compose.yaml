@@ -32,7 +32,11 @@ services:
 
   # Docker-in-Docker builder
   builder:
-    image: docker:24-dind
+#   image: docker:24-dind
+    build:
+      context: ./container/builder
+      dockerfile: Dockerfile
+#     image: builder:local          # Optional: gives the built image a name
     container_name: builder
     privileged: true
     environment:
