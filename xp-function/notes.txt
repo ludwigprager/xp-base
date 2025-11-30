@@ -18,8 +18,35 @@ crossplane xpkg init function-vpn function-template-go -d function-vpn
 crossplane render v2/claim.yaml v2/composition.yaml  v2/functiondefinition.yaml 
 
 ---
+https://docs.crossplane.io/latest/guides/write-a-composition-function-in-python/
 
 python3 -m venv $(realpath .)
 source bin/activate
 pip install hatch
+deactivate
+
+---
+
+python3 -m venv .
+source bin/activate
+pip3 install hatch
+
+---
+
+source bin/activate
+hatch run development &
+PID=$!
+
+hatch run development &
+PID=$!
+crossplane render xr.yaml composition.yaml functions.yaml
+kill "$PID"
+deactivate
+
+
+
+
+---
+
+crossplane xpkg init function-xbuckets https://github.com/crossplane/function-template-python -d function-xbuckets-py
 
