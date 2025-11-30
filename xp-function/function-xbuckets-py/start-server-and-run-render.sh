@@ -10,7 +10,11 @@ source ../../.env
 
 #TAG=${REGISTRY_FQDN}/ludwigprager/runtime:1.0
 
-deactivate || true
+#if [ -n "$VIRTUAL_ENV" ] || [ "$(python -c 'import sys; print(sys.prefix != sys.base_prefix)')" = "True" ]; then
+if [ "$(python -c 'import sys; print(sys.prefix != sys.base_prefix)')" = "True" ]; then
+    echo "Deactivating virtual environment..."
+    deactivate
+fi
 
 if [[ ! -f venv ]]; then
   python3 -m venv venv

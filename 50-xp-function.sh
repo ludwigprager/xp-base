@@ -9,6 +9,8 @@ source .env
 
 ./xp-function/local-registry/up.sh
 
+./xp-function/function-xbuckets-py/start-server-and-run-render.sh
+
 exit
 
 ./xp-function/local-registry/build-and-push.sh
