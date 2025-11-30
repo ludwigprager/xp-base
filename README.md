@@ -11,11 +11,13 @@ Install docker compose and podman, choose a GCP project which can be empty.
 git clone -o github https://github.com/ludwigprager/xp-base.git 
 ```
 
-# tell me your GCP project id:
-export XP_BASE_GCP_PROJECT=my-gcp-project-123456
-
+Tell it your GCP project id:
 ```
-# execute the deployment
+export XP_BASE_GCP_PROJECT=my-gcp-project-123456
+```
+
+Execute the deployment
+```
 ./xp-base/10-deploy.sh
 ```
 
