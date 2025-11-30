@@ -1,6 +1,6 @@
 https://marketplace.upbound.io/providers/upbound/provider-family-gcp/v2.2.0
 
-git clone http://lyra.g1:3000/lprager/xp-base.git
+git clone -o g1 http://lyra.g1:3000/lprager/xp-base.git
 
 ---
 

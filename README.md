@@ -8,7 +8,7 @@ Install docker compose and podman, choose a GCP project which can be empty.
 
 ```
 # clone the repo
-git clone https://github.com/ludwigprager/xp-base.git 
+git clone -o github https://github.com/ludwigprager/xp-base.git 
 ```
 
 # tell me your GCP project id:
