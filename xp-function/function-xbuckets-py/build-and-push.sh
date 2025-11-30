@@ -24,18 +24,17 @@ docker exec -ti builder \
 
 
 # show the registry folder
-curl -k https://registry.g1/v2/${RUNTIME_IMAGE}/tags/list
+docker exec -ti xpkg \
+  curl -k https://registry.g1/v2/${RUNTIME_IMAGE}/tags/list
 
-docker exec -ti builder \
+docker exec -ti xpkg \
   crossplane xpkg build \
     --package-root=$THIS_DIR/package \
-    --embed-runtime-image=$RUNTIME_TAG \
     --package-file=$THIS_DIR/function-xbuckets.xpkg
-
+#   --embed-runtime-image=$RUNTIME_TAG \
 
 # test registry access via xpkg:
 docker exec -ti xpkg curl https://registry.g1/v2/${RUNTIME_IMAGE}/tags/list
-
 
 docker exec -ti xpkg \
   crossplane xpkg push \
@@ -44,5 +43,4 @@ docker exec -ti xpkg \
 
 docker exec -ti xpkg \
   curl https://registry.g1/v2
-
 

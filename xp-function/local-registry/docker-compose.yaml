@@ -62,3 +62,5 @@ services:
     volumes:
       - ../:/work
     entrypoint: ["sleep", "infinity"]   # keep container running
+    extra_hosts:
+      - "registry.g1:host-gateway"
