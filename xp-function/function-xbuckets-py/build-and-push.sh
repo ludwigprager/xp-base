@@ -41,6 +41,4 @@ docker exec -ti xpkg \
     --package-files=$THIS_DIR/function-xbuckets.xpkg \
     $PACKAGE_TAG
 
-docker exec -ti xpkg \
-  curl https://registry.g1/v2
-
+docker exec -ti xpkg curl https://registry.g1/v2/${PACKAGE_IMAGE}/tags/list
