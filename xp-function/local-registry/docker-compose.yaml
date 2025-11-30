@@ -17,7 +17,6 @@ services:
     depends_on:
       - registry
     ports:
-#     - "80:80"       # Expose portless FQDN via standard HTTPS port
       - "443:443"       # Expose portless FQDN via standard HTTPS port
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
@@ -31,23 +30,22 @@ services:
 
 
   # Docker-in-Docker builder
+  # mainly to be able to access $REGISTRY_FQDN via self-signed-certificate via docker
   builder:
-#   image: docker:24-dind
     build:
       context: ./container/builder
-      dockerfile: Dockerfile
-#     image: builder:local          # Optional: gives the built image a name
     container_name: builder
     privileged: true
     environment:
       - DOCKER_TLS_CERTDIR=""
-#   command: ["--insecure-registry", "registry.g1:5000"]
     volumes:
       - ../:/work   # Workspace for builds
       - ./dind-data:/var/lib/docker
-      - ./certs:/etc/docker/certs.d:ro
-#     - ./daemon.json:/etc/docker/daemon.json:ro  # Mount insecure registry config
-      - ./certs:/etc/docker/certs.d:ro  # CA trust directory
+      - ./daemon.json:/etc/docker/daemon.json:ro  # Mount insecure registry config
+      # Self-signed registry CA
+      - ./certs/registry.g1/myCA.crt:/etc/docker/certs.d/registry.g1/ca.crt:ro
+      # Registry public certificate (optional)
+      - ./certs/registry.g1.crt:/etc/docker/certs.d/registry.g1/registry.g1.crt:ro
     working_dir: /work
     stdin_open: true
     tty: true
@@ -55,3 +53,12 @@ services:
     extra_hosts:
       - "registry.g1:host-gateway"
 
+  # mainly to be able to access $REGISTRY_FQDN via self-signed-certificate via https.
+  xpkg-builder:
+    build:
+      context: ./container/xpkg-builder
+    container_name: xpkg
+    privileged: true               # required for dind
+    volumes:
+      - ../:/work
+    entrypoint: ["sleep", "infinity"]   # keep container running

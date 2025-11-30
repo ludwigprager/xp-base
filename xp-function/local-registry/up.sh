@@ -27,6 +27,14 @@ done
 
 # cp self-signed-certificate/registry.g1.* certs/
 
+# preparations for xpkg-builder
+#mkdir -p container/xpkg-builder/certs.d/${REGISTRY_FQDN}/
+#cp self-signed-certificate/myCA/certs/myCA.crt container/xpkg-builder/certs.d/${REGISTRY_FQDN}/
+#cp -a certs/ container/xpkg-builder/
+cp certs/registry.g1/myCA.crt container/xpkg-builder/
+
+
+
 docker compose up -d
 
 # making the Crossplane controller trust a private registry
@@ -89,78 +97,5 @@ if ! kubectl get deployment crossplane -n crossplane-system -o json | \
     }
   ]'
 fi
-
-
-exit
-
-#kubectl patch deployment crossplane -n crossplane-system --type='json' -p='[
-kubectl patch deployment crossplane -n crossplane-system --type=merge -p='[
-  {
-    "op": "add",
-    "path": "/spec/template/spec/volumes/-",
-    "value": {
-      "name": "registry-ca",
-      "configMap": {
-        "name": "registry-ca"
-      }
-    }
-  },
-  {
-    "op": "add",
-    "path": "/spec/template/spec/containers/0/volumeMounts/-",
-    "value": {
-      "name": "registry-ca",
-      "mountPath": "/etc/ssl/certs/extra-ca.crt",
-      "subPath": "ca.crt"
-    }
-  },
-  {
-    "op": "add",
-    "path": "/spec/template/spec/containers/0/env/-",
-    "value": {
-      "name": "SSL_CERT_FILE",
-      "value": "/etc/ssl/certs/extra-ca.crt"
-    }
-  }
-]'
-exit
-
-kubectl patch deployment crossplane -n crossplane-system --type='merge' -p '{
-  "spec": {
-    "template": {
-      "spec": {
-        "volumes": [
-          {
-            "name": "registry-ca",
-            "configMap": {
-              "name": "registry-ca"
-            }
-          }
-        ],
-        "containers": [
-          {
-            "name": "crossplane",
-            "volumeMounts": [
-              {
-                "name": "registry-ca",
-                "mountPath": "/etc/ssl/certs/extra-ca.crt",
-                "subPath": "ca.crt"
-              }
-            ],
-            "env": [
-              {
-                "name": "SSL_CERT_FILE",
-                "value": "/etc/ssl/certs/extra-ca.crt"
-              }
-            ]
-          }
-        ]
-      }
-    }
-  }
-}'
-
-
-exit
 
 

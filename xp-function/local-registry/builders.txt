@@ -1,0 +1,122 @@
+✅ Why your crossplane xpkg push fails inside this compose DIND setup
+
+crossplane xpkg push uses containerd → Docker registry API flows under the hood.
+But inside your docker:24-dind builder container:
+
+    You have Docker running in DinD, but
+
+    You did not install Docker CLI (the DIND image contains dockerd but not docker client).
+
+    crossplane xpkg push uses buildkit / containerd and talks to the registry using the local Docker config, which is taken from:
+
+/etc/docker/daemon.json
+/etc/docker/certs.d/<registry>/
+$HOME/.docker/config.json
+
+    Inside your container, these paths exist but the registry trust does not match what crossplane expects.
+
+Main symptoms include:
+
+    xpack push hangs
+
+    xpack push returns TLS errors
+
+    Docker inside the container can push
+
+    But Crossplane cannot push (because it is not using dockerd, it pushes directly using containerd’s API)
+
+✅ What is actually missing
+
+Your builder container is missing a Docker config directory with auth + CA at:
+
+/root/.docker/config.json
+/root/.docker/ca.pem
+/etc/docker/certs.d/registry.g1/
+
+The certs under /etc/docker/certs.d/ are mounted read-only, but they only help dockerd, not Crossplane.
+Crossplane uses its own registry client, which reads:
+
+/etc/ssl/certs/
+
+and:
+
+/root/.docker/certs.d/<registry>/
+
+So your CA is not being loaded.
+✅ Fix: Copy the CA into Crossplane’s expected locations
+
+Add this to your builder Dockerfile:
+
+FROM docker:24-dind
+
+RUN apk add --no-cache curl bash ca-certificates
+
+# Install Crossplane CLI
+ENV XP_VERSION=v2.1.1
+RUN curl -sL "https://raw.githubusercontent.com/crossplane/crossplane/main/install.sh" \
+    | bash
+
+# Ensure registry CA is trusted by:
+# - dockerd (already done by your mount)
+# - system trust (required by Crossplane)
+# - docker client (if installed)
+COPY certs/registry-ca.crt /usr/local/share/ca-certificates/registry-ca.crt
+RUN update-ca-certificates
+
+# Required for Crossplane registry client:
+RUN mkdir -p /root/.docker/certs.d/registry.g1
+COPY certs/registry-ca.crt /root/.docker/certs.d/registry.g1/ca.crt
+
+# Optional: auth file if pushing to private registry
+# COPY config.json /root/.docker/config.json
+
+✅ Docker Compose update
+
+Your volume mounts can stay the same, but remove the duplicate certs mount:
+
+volumes:
+  - ./certs:/etc/docker/certs.d:ro
+  - ./daemon.json:/etc/docker/daemon.json:ro
+
+Optional: mount a docker auth config:
+
+  - ./config.json:/root/.docker/config.json
+
+✅ Verification inside the builder container
+
+Inside docker exec -ti builder sh:
+1. Check CA installation
+
+ls -l /usr/local/share/ca-certificates/
+update-ca-certificates --verbose
+
+2. Check Crossplane-visible CA
+
+ls /root/.docker/certs.d/registry.g1/
+
+You should see:
+
+ca.crt
+
+3. Check Crossplane sees the registry
+
+crossplane xpkg push ... registry.g1/...
+
+It should now succeed.
+🧠 Why this fixes it
+
+Crossplane does not use dockerd to push.
+It uses its own Go OCI registry client, which loads CA files from:
+
+    /etc/ssl/certs/*
+
+    $HOME/.docker/certs.d/<host>/ca.crt
+
+Since your CA was only available under:
+
+/etc/docker/certs.d/
+
+Crossplane could not verify the registry TLS.
+
+Adding the CA to the system trust + $HOME/.docker/... fixes the TLS handshake and the push works.
+
