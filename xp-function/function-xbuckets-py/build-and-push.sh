@@ -7,7 +7,7 @@ cd $BASEDIR
 source ../../set-env.sh
 
 RUNTIME_IMAGE=ludwigprager/function-xbuckets-py
-PACKAGE_IMAGE=ludwigprager/function-xbuckets
+PACKAGE_IMAGE=ludwigprager/xbuckets-py
 VERSION=1.0
 RUNTIME_TAG=$REGISTRY_FQDN/${RUNTIME_IMAGE}:$VERSION
 PACKAGE_TAG=$REGISTRY_FQDN/${PACKAGE_IMAGE}:$VERSION
@@ -30,7 +30,7 @@ docker exec -ti xpkg \
 docker exec -ti xpkg \
   crossplane xpkg build \
     --package-root=$THIS_DIR/package \
-    --package-file=$THIS_DIR/function-xbuckets.xpkg
+    --package-file=$THIS_DIR/function-xbuckets-py.xpkg
 #   --embed-runtime-image=$RUNTIME_TAG \
 
 # test registry access via xpkg:
@@ -38,7 +38,7 @@ docker exec -ti xpkg curl https://registry.g1/v2/${RUNTIME_IMAGE}/tags/list
 
 docker exec -ti xpkg \
   crossplane xpkg push \
-    --package-files=$THIS_DIR/function-xbuckets.xpkg \
+    --package-files=$THIS_DIR/function-xbuckets-py.xpkg \
     $PACKAGE_TAG
 
 docker exec -ti xpkg curl https://registry.g1/v2/${PACKAGE_IMAGE}/tags/list

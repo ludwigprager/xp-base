@@ -9,7 +9,7 @@ import (
 	"github.com/crossplane/function-sdk-go/request"
 	"github.com/crossplane/function-sdk-go/response"
 
-	"github.com/crossplane/function-vpn/input/v1beta1"
+	"github.com/crossplane/function-xbuckets/input/v1beta1"
 )
 
 // Function returns whatever response you ask it to.

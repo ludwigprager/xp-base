@@ -14,3 +14,4 @@ source .env
 
 # ./xp-function/local-registry/build-and-push.sh
 
+./xp-function/function-xbuckets-go/start-server-and-run-render.sh

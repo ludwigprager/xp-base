@@ -1,6 +1,0 @@
-apiVersion: pkg.crossplane.io/v1beta1
-kind: Function
-metadata:
-  name: function-xbuckets
-spec:
-  package: "registry.g1/ludwigprager/runtime:1.0"

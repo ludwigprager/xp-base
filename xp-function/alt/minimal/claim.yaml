@@ -1,8 +1,0 @@
-apiVersion: demo.crossplane.io/v1alpha1
-kind: MySQL
-metadata:
-  name: my-db
-spec:
-  parameters:
-    size: small
-

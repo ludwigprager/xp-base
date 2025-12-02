@@ -1,11 +1,11 @@
 apiVersion: pkg.crossplane.io/v1
 kind: Function
 metadata:
-  name: function-xbuckets-py
+  name: function-xbuckets-go
   annotations:
     render.crossplane.io/runtime: Development
 spec:
   # The CLI ignores this package when using the Development runtime.
   # You can set it to any value.
-  package: xpkg.crossplane.io/negz/function-xbuckets-py:v0.1.0
+  package: xpkg.crossplane.io/negz/function-xbuckets-go:v0.1.0
 

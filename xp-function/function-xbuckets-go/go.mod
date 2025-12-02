@@ -1,4 +1,4 @@
-module github.com/crossplane/function-vpn
+module github.com/crossplane/function-xbuckets
 
 go 1.24.9
 

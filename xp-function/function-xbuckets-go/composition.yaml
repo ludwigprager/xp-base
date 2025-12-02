@@ -10,5 +10,5 @@ spec:
   pipeline:
   - step: create-buckets
     functionRef:
-      name: function-xbuckets-py
+      name: function-xbuckets-go
 
