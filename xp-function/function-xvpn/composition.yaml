@@ -1,0 +1,14 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: create-xvpns
+spec:
+  compositeTypeRef:
+    apiVersion: xp.celp.de/v1
+    kind: xvpn
+  mode: Pipeline
+  pipeline:
+  - step: create-xvpns
+    functionRef:
+      name: function-xvpn
+
