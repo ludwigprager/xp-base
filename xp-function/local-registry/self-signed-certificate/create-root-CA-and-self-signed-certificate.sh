@@ -7,10 +7,10 @@ cd $BASEDIR
 source ../../../set-env.sh
 
 CERT_DIR="${BASEDIR}/certs"
-CA_DIR="${BASEDIR}/myCA"
+CA_DIR="${BASEDIR}/ca"
 
-ROOT_CA_KEY=${CA_DIR}/private/myCA.key
-ROOT_CA_CERT=${CA_DIR}/certs/myCA.crt
+ROOT_CA_KEY=${CA_DIR}/private/ca.key
+ROOT_CA_CERT=${CA_DIR}/certs/ca.crt
 
 mkdir -p "${CERT_DIR}"
 mkdir -p "${CA_DIR}"/{certs,crl,newcerts,private}
@@ -89,20 +89,20 @@ if [ ! -f "${SERVER_CRT}" ]; then
     -extfile "${SERVER_CONF}" -extensions req_ext
 fi
 
-#echo "🎉 Done!"
-echo "Root CA:            ${ROOT_CA_CERT}"
-echo "Server key:         ${SERVER_KEY}"
-echo "Server certificate: ${SERVER_CRT}"
+##echo "🎉 Done!"
+#echo "Root CA:            ${ROOT_CA_CERT}"
+#echo "Server key:         ${SERVER_KEY}"
+#echo "Server certificate: ${SERVER_CRT}"
 
 
 ## If still untrusted → ensure your server presents the full cert chain
 ## but since you’re self-signed, the single cert should be enough
-#FULLCHAIN=${CERT_DIR}/g1.fullchain.crt.pem
-#if [ ! -f "${FULLCHAIN}" ]; then
-#  echo creating full chain pem certificate
-#  cat $SERVER_CRT $ROOT_CA_CERT > $FULLCHAIN
-#fi
-#
+FULLCHAIN=${CERT_DIR}/registry.g1.fullchain.crt
+if [ ! -f "${FULLCHAIN}" ]; then
+  echo creating full chain certificate
+  cat $SERVER_CRT $ROOT_CA_CERT > $FULLCHAIN
+fi
+
 #echo "Full chain certificate: ${FULLCHAIN}"
 
 
