@@ -23,6 +23,8 @@ done
 
 # preparations for xpkg
 cp self-signed-certificate/ca/certs/ca.crt container/xpkg/
+cp self-signed-certificate/certs/registry.g1.fullchain.crt container/xpkg/
+
 
 
 
