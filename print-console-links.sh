@@ -12,6 +12,10 @@ echo "Buckets: https://console.cloud.google.com/storage/browser?project=${CLOUDS
 
 echo "Service accounts: https://console.cloud.google.com/iam-admin/serviceaccounts?project=${CLOUDSDK_CORE_PROJECT}"
 
+echo "VMs: https://console.cloud.google.com/compute/instances?referrer=search&project=${CLOUDSDK_CORE_PROJECT}"
+
+
+
 exit
 
 

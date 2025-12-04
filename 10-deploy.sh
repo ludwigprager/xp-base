@@ -6,5 +6,5 @@ cd $BASEDIR
 
 ./20-start-mgmt-cluster.sh
 ./30-prepare-for-gcp.sh 
-./40-create-bucket.sh
+./40-create-vm.sh
 ./50-xp-function.sh

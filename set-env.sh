@@ -19,3 +19,4 @@ export CLOUDSDK_CORE_PROJECT=${XP_BASE_GCP_PROJECT}
 # GCP service account
 SA_NAME="crossplane"
 
+VM_USER=user1

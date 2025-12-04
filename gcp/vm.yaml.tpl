@@ -1,3 +1,6 @@
+# https://cloud.google.com/compute/vm-instance-pricing#shared-core-machine-types
+# https://marketplace.upbound.io/providers/upbound/provider-gcp-compute/v2.2.0/resources/compute.gcp.m.upbound.io/Instance/v1beta1#doc:spec-forProvider
+
 
 apiVersion: compute.gcp.upbound.io/v1beta2
 kind: Instance
@@ -5,7 +8,7 @@ metadata:
   name: wg-vm
 spec:
   forProvider:
-    zone: europe-west3-c
+    zone: europe-west3-c      # ✅ Required
     machineType: f1-micro
 
     bootDisk:
@@ -19,7 +22,6 @@ spec:
           - {}  # ephemeral external IP
 
     metadata:
-#     ssh-keys: "ludwig:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEKGyGbW+QNVwgG9fLDFKDpAtptVNxOaN5DJcjVzlch/"
       ssh-keys: "${VM_USER}:${PUBLIC_KEY}"
 
   providerConfigRef:

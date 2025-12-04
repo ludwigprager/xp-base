@@ -16,6 +16,9 @@ set +e
 
 docker compose  -f xp-function/local-registry/docker-compose.yaml down
 
+# Delete all managed resources cluster-wide
+kubectl get managed --all-namespaces -o name | xargs kubectl delete
+
 
 echo "Deleting the bucket"
 export BUCKETNAME=$(cat ./bucketname.txt)
