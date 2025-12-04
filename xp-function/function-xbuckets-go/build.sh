@@ -6,7 +6,7 @@ BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $BASEDIR
 
 source ../../.env
-source utils.sh
+source misc/utils.sh
 
 TAG=${REGISTRY_FQDN}/ludwigprager/runtime:1.0
 

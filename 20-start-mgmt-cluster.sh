@@ -41,7 +41,7 @@ export HOST_IP=$(ip addr show docker0 | grep -Po 'inet \K[\d.]+')
 
 envsubst < ./misc/env.tpl > .env
 cat set-env.sh >> .env
-cat utils.sh >> .env
+cat misc/utils.sh >> .env
 source .env
 
 kubectl completion bash | sed 's/kubectl/k/g' >> .env

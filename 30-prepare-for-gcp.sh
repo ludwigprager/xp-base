@@ -10,47 +10,47 @@ source .env
 
 mkdir -p .gcloud-config
 
-if ./gcloud.sh auth list --format="value(account)" 2>/dev/null | grep -q .; then
+if ./misc/gcloud.sh auth list --format="value(account)" 2>/dev/null | grep -q .; then
     echo "Already authenticated"
 else
     echo "Not authenticated, need to login"
-    ./gcloud.sh auth login
+    ./misc/gcloud.sh auth login
 fi
 
 # echo "Checking if Compute Engine API is enabled for project $CLOUDSDK_CORE_PROJECT"
 
 
-if ./gcloud.sh services list --enabled 2>/dev/null | grep -q '^compute.googleapis.com\ *Compute Engine API'
+if ./misc/gcloud.sh services list --enabled 2>/dev/null | grep -q '^compute.googleapis.com\ *Compute Engine API'
 then
     echo "Compute Engine API is already enabled."
 else
     echo "Compute Engine API is not enabled. Enabling now..."
-    ./gcloud.sh services enable compute.googleapis.com
+    ./misc/gcloud.sh services enable compute.googleapis.com
     echo "Compute Engine API has been enabled."
 fi
 
 
 
 #echo "Test: printing existing compute instances"
-#./gcloud.sh compute instances list
+#./misc/gcloud.sh compute instances list
 
 
 
 SA_EMAIL="$SA_NAME@${CLOUDSDK_CORE_PROJECT}.iam.gserviceaccount.com"
 
 # 2. Create a service account for Crossplane
-if ./gcloud.sh iam service-accounts list \
+if ./misc/gcloud.sh iam service-accounts list \
     --filter="email:$SA_EMAIL" \
     --format="value(email)" | grep -q "$SA_EMAIL"; then
     echo "Service account $SA_NAME already exists."
 else
     echo "Creating service account $SA_NAME"
-  ./gcloud.sh iam service-accounts create $SA_NAME \
+  ./misc/gcloud.sh iam service-accounts create $SA_NAME \
     --display-name="Crossplane Service Account"
 
 
   echo "Waiting for service account $SA_EMAIL to exist..."
-  until ./gcloud.sh iam service-accounts describe "$SA_EMAIL" >/dev/null 2>&1; do
+  until ./misc/gcloud.sh iam service-accounts describe "$SA_EMAIL" >/dev/null 2>&1; do
     sleep 2
   done
   echo "Service account is ready."
@@ -63,12 +63,12 @@ fi
 
 # Minimum roles for VM creation:
 echo "Granting compute.admin role to sa"
-./gcloud.sh projects add-iam-policy-binding $CLOUDSDK_CORE_PROJECT \
+./misc/gcloud.sh projects add-iam-policy-binding $CLOUDSDK_CORE_PROJECT \
   --member="serviceAccount:${SA_EMAIL}" \
   --role="roles/compute.admin"  > /dev/null
 
 echo "Granting iam.serviceAccountUser role to sa"
-./gcloud.sh projects add-iam-policy-binding $CLOUDSDK_CORE_PROJECT \
+./misc/gcloud.sh projects add-iam-policy-binding $CLOUDSDK_CORE_PROJECT \
   --member="serviceAccount:${SA_EMAIL}" \
   --role="roles/iam.serviceAccountUser"  > /dev/null
 
@@ -76,14 +76,14 @@ echo "Granting iam.serviceAccountUser role to sa"
 echo "Granting storage.admin role to sa"
 # Optional roles (useful but not strictly required):
 # If you create disks, snapshots, images
-./gcloud.sh projects add-iam-policy-binding $CLOUDSDK_CORE_PROJECT \
+./misc/gcloud.sh projects add-iam-policy-binding $CLOUDSDK_CORE_PROJECT \
   --member="serviceAccount:${SA_EMAIL}" \
   --role="roles/storage.admin"  > /dev/null
 
 JSON_FILE="./gcp-credentials.json"
 
 # 4. Create and download the JSON key
-./gcloud.sh iam service-accounts keys create /workspace/${JSON_FILE} \
+./misc/gcloud.sh iam service-accounts keys create /workspace/${JSON_FILE} \
   --iam-account="${SA_EMAIL}"
 
 

@@ -7,7 +7,7 @@ cd $BASEDIR
 IMAGE_NAME=gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
 
 # source env file to learn CLOUDSDK_CORE_PROJECT
-source set-env.sh
+source ../set-env.sh
 
 # Ensure config directory exists
 mkdir -p "$PWD/.gcloud-config"

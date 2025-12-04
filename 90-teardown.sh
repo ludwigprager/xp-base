@@ -5,7 +5,7 @@ CKA_BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $CKA_BASEDIR
 
 export NS=none
-source utils.sh
+source misc/utils.sh
 source set-env.sh
 source .env || true
 
@@ -22,9 +22,9 @@ kubectl get managed --all-namespaces -o name | xargs kubectl delete
 
 echo "Deleting the bucket"
 export BUCKETNAME=$(cat ./bucketname.txt)
-envsubst < gcp/bucket.tpl | ./bin/kubectl delete -f -
+envsubst < gcp/bucket.yaml.tpl | ./bin/kubectl delete -f -
 
-./gcloud.sh iam service-accounts delete $SA_NAME.@${CLOUDSDK_CORE_PROJECT}.iam.gserviceaccount.com --quiet
+./misc/gcloud.sh iam service-accounts delete $SA_NAME.@${CLOUDSDK_CORE_PROJECT}.iam.gserviceaccount.com --quiet
 
 echo Tearing down the cluster ...
 ./bin/kind delete clusters $CLUSTER -q || true
@@ -58,5 +58,5 @@ done
 
 '
 
-./gcloud.sh iam service-accounts delete ${SA_NAME}@${CLOUDSDK_CORE_PROJECT}.iam.gserviceaccount.com  --quiet
+./misc/gcloud.sh iam service-accounts delete ${SA_NAME}@${CLOUDSDK_CORE_PROJECT}.iam.gserviceaccount.com  --quiet
 
