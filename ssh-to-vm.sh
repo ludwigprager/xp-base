@@ -8,5 +8,5 @@ source .env
 
 ADDRESS=$(kubectl get instances wg-vm  -o json | jq -r .status.atProvider.networkInterface[0].accessConfig[].natIp)
 
-ssh ${VM_USER}@$ADDRESS
+ssh -i ${SSH_KEY_NAME} ${VM_USER}@$ADDRESS
 

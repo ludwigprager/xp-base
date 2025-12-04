@@ -20,3 +20,4 @@ export CLOUDSDK_CORE_PROJECT=${XP_BASE_GCP_PROJECT}
 SA_NAME="crossplane"
 
 VM_USER=user1
+SSH_KEY_NAME="id_ed25519_crossplane"

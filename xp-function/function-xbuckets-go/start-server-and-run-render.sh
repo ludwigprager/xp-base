@@ -19,6 +19,10 @@ docker run -d --rm \
   golang:1.24.9 \
   go run . --insecure --debug
 
+docker logs -f function-xbuckets-go &
+PID=$-
+echo $PID
+
 crossplane render xr.yaml composition.yaml functions.yaml
 
 docker rm -f function-xbuckets-go

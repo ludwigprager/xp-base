@@ -25,6 +25,8 @@ docker run -d --rm \
   golang:1.24.9 \
   go run . --insecure --debug
 
+#docker logs -f function-xvpn &
+
 crossplane render xr.yaml composition.yaml functions.yaml
 
 docker rm -f function-xvpn
