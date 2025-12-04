@@ -12,7 +12,7 @@ fi
 
 export BUCKETNAME=$(cat ./bucketname.txt)
 
-envsubst < gcp/bucket.yaml.tpl | ./bin/kubectl apply -f -
+#envsubst < gcp/bucket.yaml.tpl | ./bin/kubectl apply -f -
 
 
 # Check if ssh key already exists
@@ -28,12 +28,8 @@ if [[ ! -f "$SSH_KEY_NAME" ]]; then
 
 fi
 
-
-
-
-
 export VM_USER
 export PUBLIC_KEY=$(echo "$(cut -d ' ' -f1-2 ${SSH_KEY_NAME}.pub)")
 
-envsubst < gcp/vm.yaml.tpl | ./bin/kubectl apply -f -
+#envsubst < gcp/vm.yaml.tpl | ./bin/kubectl apply -f -
 

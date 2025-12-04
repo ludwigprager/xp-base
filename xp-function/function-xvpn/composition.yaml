@@ -6,9 +6,16 @@ spec:
   compositeTypeRef:
     apiVersion: xp.celp.de/v1
     kind: xvpn
+
   mode: Pipeline
   pipeline:
-  - step: create-xvpns
-    functionRef:
-      name: function-xvpn
-
+    - step: create-vm
+      functionRef:
+        name: function-xvpn
+      input:
+        apiVersion: xvpn.fn.crossplane.io/v1beta1
+        kind: Input
+        vmUser: admin
+        publicKey: ssh-rsa AAAAB3NzaC...
+        zone: us-central1-a
+        machineType: e2-medium

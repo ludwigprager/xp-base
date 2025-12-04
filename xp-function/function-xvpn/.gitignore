@@ -21,3 +21,8 @@
 go.work
 
 go/
+
+.go-mod-cache/
+.go-build-cache/
+
+package/input/xvpn.fn.crossplane.io_inputs.yaml

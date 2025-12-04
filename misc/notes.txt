@@ -62,3 +62,16 @@ kubectl -n kube-system rollout restart deployment coredns
 kubectl -n kube-system get pods -l k8s-app=kube-dns
 kubectl run -i --tty --rm testpod --image=busybox --restart=Never -- nslookup registry.g1
 
+
+---
+
+./misc/gcloud.sh compute firewall-rules create allow-wireguard \
+    --direction=INGRESS \
+    --priority=1000 \
+    --network=default \
+    --action=ALLOW \
+    --rules=udp:51820 \
+    --target-tags=wireguard-server \
+    --source-ranges=0.0.0.0/0
+
+./misc/gcloud.sh compute instances add-tags wg-vm --tags=wireguard-server --zone=us-central1-a

@@ -8,8 +8,9 @@ metadata:
   name: wg-vm
 spec:
   forProvider:
-    zone: europe-west3-c      # ✅ Required
-    machineType: f1-micro
+#   zone: europe-west3-c      # ✅ Required
+    zone: us-central1-a
+    machineType: e2-medium
 
     bootDisk:
       autoDelete: true

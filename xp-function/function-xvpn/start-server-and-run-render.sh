@@ -16,14 +16,14 @@ trap cleanup EXIT
 ./generate.sh
 
 docker run -d --rm \
-  --name=function-xvpn \
-  --network=host \
-  -w /work \
-  -v $(pwd):/work/ \
-  -e GOMODCACHE=/work/go/ \
-  -e GOCACHE=/work/go/build-cache \
-  golang:1.24.9 \
-  go run . --insecure --debug
+    --name=function-xvpn \
+    --network=host \
+    -w /work \
+    -v $(pwd):/work/ \
+    -e GOMODCACHE=/work/.go-mod-cache \
+    -e GOCACHE=/work/.go-build-cache \
+    golang:1.24.9 \
+    go run . --insecure --debug
 
 #docker logs -f function-xvpn &
 
