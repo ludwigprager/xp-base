@@ -80,7 +80,7 @@ echo "Granting storage.admin role to sa"
   --member="serviceAccount:${SA_EMAIL}" \
   --role="roles/storage.admin"  > /dev/null
 
-JSON_FILE="./misc/gcp-credentials.json"
+JSON_FILE="gcp-credentials.json"
 
 # 4. Create and download the JSON key
 ./misc/gcloud.sh iam service-accounts keys create /workspace/${JSON_FILE} \
@@ -92,14 +92,14 @@ NAMESPACE="upbound-system"
 export GCP_SECRET_NAME="gcp-secret"
 
 # Check if JSON file exists
-if [ ! -f "$JSON_FILE" ]; then
+if [ ! -f "misc/$JSON_FILE" ]; then
   echo "Error: $JSON_FILE not found!"
   exit 1
 fi
 
 echo "Creating Secret '$GCP_SECRET_NAME' to namespace '$NAMESPACE' "
 
-B64=$(base64 -w0 "$JSON_FILE")
+B64=$(base64 -w0 "./misc/$JSON_FILE")
 
 # Apply the secret using a heredoc
 ./bin/kubectl apply -f gcp/namespace.yaml
