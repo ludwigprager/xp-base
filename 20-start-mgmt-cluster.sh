@@ -39,7 +39,7 @@ export XP_BASE_ROOT=$(git rev-parse --show-toplevel)
 export HOSTNAME=$(hostname)
 export HOST_IP=$(ip addr show docker0 | grep -Po 'inet \K[\d.]+')
 
-envsubst < env.tpl > .env
+envsubst < ./misc/env.tpl > .env
 cat set-env.sh >> .env
 cat utils.sh >> .env
 source .env
@@ -54,7 +54,7 @@ if ! kind-cluster-exists $CLUSTER; then
   # curl -LO https://raw.githubusercontent.com/cilium/cilium/1.15.6/Documentation/installation/kind-config.yaml 
   kind create cluster \
     -n $CLUSTER \
-    --config kind.config \
+    --config ./misc/kind.config \
     --image kindest/node:v${NODE_VERSION}
 fi
 
@@ -88,7 +88,7 @@ echo "Waiting for crossplane to get available"
 
 # kubectl -n kube-system get configmap coredns -o yaml | yq .data.Corefile > Corefile
 kubectl -n kube-system create configmap coredns \
-  --from-file=Corefile=Corefile \
+  --from-file=Corefile=./misc/Corefile \
   --dry-run=client -o yaml | kubectl apply -f -
 
 kubectl -n kube-system rollout restart deployment coredns
