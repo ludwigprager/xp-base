@@ -28,6 +28,22 @@ if [[ ! -f "$SSH_KEY_NAME" ]]; then
 
 fi
 
+echo "Waiting before creating a VM"
+
+# 1. Wait for Crossplane system to be ready
+kubectl wait --for=condition=ready pod \
+  -l app=crossplane \
+  -n crossplane-system \
+  --timeout=300s
+
+# 2. Wait for GCP provider to be ready
+kubectl wait --for=condition=ready pod \
+  -l pkg.crossplane.io/provider=provider-gcp-compute \
+  -n crossplane-system \
+  --timeout=300s
+
+# ---
+
 export VM_USER
 export PUBLIC_KEY=$(echo "$(cut -d ' ' -f1-2 ${SSH_KEY_NAME}.pub)")
 

@@ -100,4 +100,15 @@ EOF
 
 ADDRESS=$(kubectl get instances wg-vm  -o json | jq -r .status.atProvider.networkInterface[0].accessConfig[].natIp)
 
-echo http://$ADDRESS/client-1.conf.png
+
+URL="http://$ADDRESS/client-1.conf.png"
+
+if command -v xdg-open > /dev/null; then
+    xdg-open "$URL"  # Linux
+elif command -v open > /dev/null; then
+    open "$URL"      # macOS
+elif command -v start > /dev/null; then
+    start "$URL"     # Windows (Git Bash)
+else
+    echo "Cannot detect browser opener"
+fi
