@@ -1,6 +1,29 @@
 ---
-apiVersion: meta.pkg.crossplane.io/v1beta1
+
+apiVersion: meta.pkg.crossplane.io/v1
 kind: Function
 metadata:
-  name: function-template-go
-spec: {}
+  name: function-xvpn
+spec:
+  # Human-friendly info
+  crossplane:
+    version: ">=1.16.0"
+
+  # OCI image that will actually run your Function (your Go gRPC server)
+  runtime:
+    image: registry.g1/xp/function-xvpn:1.0
+
+  # Optional: config for the function package manager
+  permissions:
+    rules:
+      - apiGroups: ["*"]
+        resources: ["*"]
+        verbs: ["*"]
+
+  # Optional: reference documentation for the composition author
+  maintainers:
+    - name: Otto Luty
+
+  description: |
+    Crossplane Function that renders a VPN + static IP setup.
+

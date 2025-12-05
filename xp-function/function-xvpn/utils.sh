@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 
 function go-in-docker() {
   local command="$*"

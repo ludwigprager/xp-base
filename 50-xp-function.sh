@@ -12,9 +12,7 @@ source .env
 ./xp-function/function-xbuckets-py/start-server-and-run-render.sh
 ./xp-function/function-xbuckets-py/build-and-push.sh
 
-# ./xp-function/local-registry/build-and-push.sh
-
 ./xp-function/function-xbuckets-go/start-server-and-run-render.sh
 
 ./xp-function/function-xvpn/start-server-and-run-render.sh
-./xp-function/function-xvpn/build.sh
+./xp-function/function-xvpn/build-and-push.sh
