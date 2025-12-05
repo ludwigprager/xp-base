@@ -24,6 +24,7 @@ echo "Deleting the bucket"
 export BUCKETNAME=$(cat ./bucketname.txt)
 envsubst < gcp/bucket.yaml.tpl | ./bin/kubectl delete -f -
 
+./misc/gcloud.sh compute firewall-rules delete allow-wireguard --quiet
 ./misc/gcloud.sh iam service-accounts delete $SA_NAME.@${CLOUDSDK_CORE_PROJECT}.iam.gserviceaccount.com --quiet
 
 echo Tearing down the cluster ...

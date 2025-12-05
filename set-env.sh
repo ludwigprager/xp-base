@@ -21,3 +21,6 @@ SA_NAME="crossplane"
 
 VM_USER=user1
 SSH_KEY_NAME="id_ed25519_crossplane"
+
+export GCP_VM_ZONE=europe-west3-c
+export GCP_VM_ZONE=us-central1-a

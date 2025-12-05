@@ -9,7 +9,8 @@ metadata:
 spec:
   forProvider:
 #   zone: europe-west3-c      # ✅ Required
-    zone: us-central1-a
+#   zone: us-central1-a
+    zone: ${GCP_VM_ZONE}
     machineType: e2-medium
 
     bootDisk:
