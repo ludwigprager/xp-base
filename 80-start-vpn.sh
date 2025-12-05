@@ -56,7 +56,7 @@ sudo usermod -aG docker $VM_USER
 docker run hello-world
 
 if [[ ! -d wireguard-container ]]; then
-  git clone https://github.com/ludwigprager/wireguard-container.git
+  git clone --branch v1.0 https://github.com/ludwigprager/wireguard-container.git
 fi
 
 sudo apt -y install wireguard wireguard-tools
@@ -100,4 +100,4 @@ EOF
 
 ADDRESS=$(kubectl get instances wg-vm  -o json | jq -r .status.atProvider.networkInterface[0].accessConfig[].natIp)
 
-echo http://$ADDRESS/desktop-1.conf.png
+echo http://$ADDRESS/client-1.conf.png
