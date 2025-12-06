@@ -9,7 +9,8 @@ metadata:
 spec:
   forProvider:
     zone: ${GCP_VM_ZONE}
-    machineType: e2-medium
+#   machineType: e2-medium
+    machineType: g1-small
 
     bootDisk:
       autoDelete: true
