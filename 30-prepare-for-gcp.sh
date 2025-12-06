@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $BASEDIR
 
@@ -8,16 +8,13 @@ cd $BASEDIR
 
 source .env
 
-mkdir -p .gcloud-config
 
-if ./misc/gcloud.sh auth list --format="value(account)" 2>/dev/null | grep -q .; then
-    echo "Already authenticated"
-else
-    echo "Not authenticated, need to login"
-    ./misc/gcloud.sh auth login
-fi
+./misc/setup-gcp-project.sh $GCP_PROJECT_NAME
 
-# echo "Checking if Compute Engine API is enabled for project $CLOUDSDK_CORE_PROJECT"
+export CLOUDSDK_CORE_PROJECT=$(./misc/gcloud.sh config get-value project 2>/dev/null | tr -d '\r' )
+sed -i "s/^export CLOUDSDK_CORE_PROJECT=.*/CLOUDSDK_CORE_PROJECT=$CLOUDSDK_CORE_PROJECT/" .env
+
+
 
 
 if ./misc/gcloud.sh services list --enabled 2>/dev/null | grep -q '^compute.googleapis.com\ *Compute Engine API'

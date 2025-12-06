@@ -6,6 +6,6 @@ cd $BASEDIR
 
 source .env
 
-ADDRESS=$(kubectl get instances wg-vm  -o json | jq -r .status.atProvider.networkInterface[0].accessConfig[].natIp)
+ADDRESS=$(kubectl get instances ${GCP_VM_NAME}  -o json | jq -r .status.atProvider.networkInterface[0].accessConfig[].natIp)
 
 ssh -F misc/ssh-config -i ${SSH_KEY_NAME} ${VM_USER}@$ADDRESS $@

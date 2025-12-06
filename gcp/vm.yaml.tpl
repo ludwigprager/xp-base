@@ -5,7 +5,7 @@
 apiVersion: compute.gcp.upbound.io/v1beta2
 kind: Instance
 metadata:
-  name: wg-vm
+  name: ${GCP_VM_NAME}
 spec:
   forProvider:
     zone: ${GCP_VM_ZONE}

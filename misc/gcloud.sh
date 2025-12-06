@@ -13,16 +13,19 @@ source ../set-env.sh
 mkdir -p "$PWD/.gcloud-config"
 mkdir -p "$PWD/.podman-images"
 
-#export graphroot=$BASEDIR/./storage
-#   --storage-opt "additionalimagestore=/$BASEDIR/.podman-images/" \
+# Use -it only if stdin is a terminal
+if [ -t 0 ]; then
+    INTERACTIVE_FLAGS="-it"
+else
+    INTERACTIVE_FLAGS="-i"
+fi
 
 # Run gcloud in Docker
-podman run --rm -it \
+podman run --rm $INTERACTIVE_FLAGS \
     -v "$PWD:/workspace" \
     -v "$PWD/.gcloud-config:/gcloud-home/.config/gcloud" \
     -e CLOUDSDK_CONFIG=/gcloud-home/.config/gcloud \
-    -e CLOUDSDK_CORE_PROJECT=$CLOUDSDK_CORE_PROJECT \
     -e HOME=/gcloud-home \
     $IMAGE_NAME \
     gcloud "$@"
-
+#   gcloud "$@" | tr -d '\r'
