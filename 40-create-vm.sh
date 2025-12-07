@@ -58,4 +58,5 @@ export VM_USER
 export PUBLIC_KEY=$(echo "$(cut -d ' ' -f1-2 ${SSH_KEY_NAME}.pub)")
 
 envsubst < gcp/vm.yaml.tpl | ./bin/kubectl apply -f -
+envsubst < gcp/network.yaml.tpl | ./bin/kubectl apply -f -
 

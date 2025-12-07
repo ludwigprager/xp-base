@@ -27,30 +27,30 @@ done
 
 
 
-if ! ./misc/gcloud.sh compute firewall-rules describe allow-wireguard &>/dev/null; then
-./misc/gcloud.sh compute firewall-rules create allow-wireguard \
-    --direction=INGRESS \
-    --priority=1000 \
-    --network=default \
-    --action=ALLOW \
-    --rules=udp:51820,tcp:80,tcp:443 \
-    --target-tags=wireguard-server \
-    --source-ranges=0.0.0.0/0
-fi
+#if ! ./misc/gcloud.sh compute firewall-rules describe allow-wireguard &>/dev/null; then
+#./misc/gcloud.sh compute firewall-rules create allow-wireguard \
+#    --direction=INGRESS \
+#    --priority=1000 \
+#    --network=default \
+#    --action=ALLOW \
+#    --rules=udp:51820,tcp:80,tcp:443 \
+#    --target-tags=wireguard-server \
+#    --source-ranges=0.0.0.0/0
+#fi
 
-TAGS=$(./misc/gcloud.sh compute instances describe wg-vm \
-    --zone=${GCP_VM_ZONE} \
-    --format="get(tags.items)")
-
-if [[ ! "$TAGS" =~ wireguard-server ]]; then
-./misc/gcloud.sh compute instances add-tags wg-vm \
-    --tags=wireguard-server \
-    --zone=${GCP_VM_ZONE}
-fi
+#TAGS=$(./misc/gcloud.sh compute instances describe ${GCP_VM_NAME} \
+#    --zone=${GCP_VM_ZONE} \
+#    --format="get(tags.items)")
+#
+#if [[ ! "$TAGS" =~ wireguard-server ]]; then
+#./misc/gcloud.sh compute instances add-tags ${GCP_VM_NAME} \
+#    --tags=wireguard-server \
+#    --zone=${GCP_VM_ZONE}
+#fi
 
 
 echo "Copying script to VM and executing"
-ADDRESS=$(kubectl get instances wg-vm  -o json | jq -r .status.atProvider.networkInterface[0].accessConfig[].natIp)
+ADDRESS=$(kubectl get instances ${GCP_VM_NAME} -o json | jq -r .status.atProvider.networkInterface[0].accessConfig[].natIp)
 scp -F misc/ssh-config -i ${SSH_KEY_NAME} misc/start-vpn.sh ${VM_USER}@$ADDRESS:
 
 ./ssh-to-vm.sh bash -x ./start-vpn.sh $VM_USER

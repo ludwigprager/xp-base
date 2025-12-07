@@ -90,3 +90,19 @@ for SA in $(./gcloud.sh iam service-accounts list --format="value(email)"); do
   ./gcloud.sh iam service-accounts keys list --iam-account="$SA"
   echo ""
 done
+
+# ---
+
+kubectl describe instances.compute.gcp.upbound.io vpn0
+
+# Check Crossplane resource status
+kubectl get instances.compute.gcp.upbound.io vpn0
+
+# Check detailed status
+kubectl describe instances.compute.gcp.upbound.io vpn0
+
+# Verify VM in GCP
+./misc/gcloud.sh compute instances list --filter="name=vpn0"
+
+# Check if it's running
+./misc/gcloud.sh compute instances describe vpn0 --zone=${GCP_VM_ZONE} --format="get(status)"

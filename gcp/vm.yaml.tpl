@@ -9,7 +9,6 @@ metadata:
 spec:
   forProvider:
     zone: ${GCP_VM_ZONE}
-#   machineType: e2-medium
     machineType: g1-small
 
     bootDisk:
@@ -22,14 +21,19 @@ spec:
         accessConfig:
           - {}  # ephemeral external IP
 
+    tags:
+      - wireguard-server  # Match the firewall targetTags
+
     metadata:
       ssh-keys: "${VM_USER}:${PUBLIC_KEY}"
 
   providerConfigRef:
     name: default
 
-  managementPolicies:
-    - Observe
-    - Update        # Allow Crossplane to manage after adoption
-    # - LateInitialize (default) if needed
+# managementPolicies:
+#   - Observe
+#   - Update        # Allow Crossplane to manage after adoption
+#   # - LateInitialize (default) if needed
 
+  managementPolicies:
+    - "*"  # Full management

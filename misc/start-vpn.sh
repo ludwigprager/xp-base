@@ -32,12 +32,12 @@ sudo usermod -aG docker $VM_USER
 docker run hello-world
 
 if [[ ! -d wireguard-container ]]; then
-  git clone --branch v1.0 https://github.com/ludwigprager/wireguard-container.git
+  git clone --branch v1.0.1 https://github.com/ludwigprager/wireguard-container.git
 fi
 
 sudo apt -y install wireguard wireguard-tools
 echo "Creating wg server config"
-./wireguard-container/create-server-config.sh
+./wireguard-container/create-server-config.sh 150
 echo "Creating wg client configs"
 ./wireguard-container/create-configs.sh
 #Todo warum sudo

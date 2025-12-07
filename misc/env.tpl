@@ -8,6 +8,8 @@ export PS1='$(if [[ $PWD == $XP_BASE_ROOT ]]; then printf "[ ]"; elif [[ $PWD ==
 PATH=$XP_BASE_ROOT/bin:$PATH
 alias kubectl=$XP_BASE_ROOT/bin/kubectl
 alias k=$XP_BASE_ROOT/bin/kubectl
+alias "nn=vim $XP_BASE_ROOT/misc/notes.txt"
+alias "cnn=cat $XP_BASE_ROOT/misc/notes.txt"
 
 
 export HELM_HOME=$XP_BASE_ROOT/my_helm_dir
