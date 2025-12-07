@@ -15,11 +15,9 @@ REGISTRY_FQDN=registry.g1
 
 # GCP settings
 # GCP project
-#export CLOUDSDK_CORE_PROJECT=${XP_BASE_GCP_PROJECT}
 GCP_PROJECT_NAME=neptun
 export CLOUDSDK_CORE_PROJECT=
 
-#export CLOUDSDK_CORE_PROJECT=${XP_BASE_GCP_PROJECT}
 # GCP service account
 SA_NAME="crossplane"
 
