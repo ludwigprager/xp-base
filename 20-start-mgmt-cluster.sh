@@ -56,6 +56,12 @@ if ! kind-cluster-exists $CLUSTER; then
     -n $CLUSTER \
     --config ./misc/kind.config \
     --image kindest/node:v${NODE_VERSION}
+
+else
+  if [[ ! -f $KUBECONFIG ]]; then
+    kind export kubeconfig \
+    -n $CLUSTER
+  fi
 fi
 
 
