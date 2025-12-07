@@ -11,7 +11,8 @@ source .env
 
 ./misc/setup-gcp-project.sh $GCP_PROJECT_NAME
 
-export CLOUDSDK_CORE_PROJECT=$(./misc/gcloud.sh config get-value project 2>/dev/null | tr -d '\r' )
+#export CLOUDSDK_CORE_PROJECT=$(./misc/gcloud.sh config get-value project 2>/dev/null | tr -d '\r' )
+export CLOUDSDK_CORE_PROJECT=$(./misc/gcloud.sh config get-value project)
 sed -i "s/^export CLOUDSDK_CORE_PROJECT=.*/CLOUDSDK_CORE_PROJECT=$CLOUDSDK_CORE_PROJECT/" .env
 
 

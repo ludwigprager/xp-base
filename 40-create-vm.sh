@@ -44,6 +44,16 @@ kubectl wait --for=condition=ready pod \
 
 # ---
 
+# debug:
+kubectl -n crossplane-system get pods -l pkg.crossplane.io/provider=provider-gcp-compute
+#kubectl -n crossplane-system logs deployment/provider-gcp-compute --all-containers
+kubectl -n crossplane-system get svc provider-gcp-compute
+kubectl get provider.pkg
+kubectl get providerrevision
+kubectl -n crossplane-system get pods
+kubectl logs -n crossplane-system $(kubectl get deploy -n crossplane-system -o name | grep provider-gcp-compute) || true
+
+
 export VM_USER
 export PUBLIC_KEY=$(echo "$(cut -d ' ' -f1-2 ${SSH_KEY_NAME}.pub)")
 

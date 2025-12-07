@@ -13,7 +13,7 @@ sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyring
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
 sudo apt update
-sudo apt dist-upgrade
+sudo apt -y dist-upgrade
 
 # Install Docker only if not already installed
 if ! command -v docker &> /dev/null; then

@@ -4,16 +4,11 @@ Welcome to **xp-base**, a bootstrap-style repository to help you quickly get sta
 
 # TL;DR
 
-Install docker compose and podman, choose a GCP project which can be empty.
+Install docker compose, podman, scp, then
 
 ```
 # clone the repo
 git clone -o github https://github.com/ludwigprager/xp-base.git 
-```
-
-Tell it your GCP project id:
-```
-export XP_BASE_GCP_PROJECT=my-gcp-project-123456
 ```
 
 Execute the deployment

@@ -136,22 +136,3 @@ else
   fi
 fi
 
-echo ""
-echo "=== Setup Complete ==="
-echo "Project Name: $PROJECT_NAME"
-echo "Project ID: $PROJECT_ID"
-echo "✓ gcloud.sh is configured to use this project"
-if [ "${BILLING_SUCCESS:-false}" = "true" ]; then
-  echo "✓ Billing is enabled"
-else
-  echo "✗ Billing is NOT enabled - enable it manually before using compute resources"
-fi
-echo ""
-echo "Next steps:"
-if [ "${BILLING_SUCCESS:-false}" = "true" ]; then
-  echo "  - Enable required APIs: ./gcloud.sh services enable compute.googleapis.com"
-  echo "  - Create resources: ./gcloud.sh compute instances list"
-else
-  echo "  - Enable billing first at: https://console.cloud.google.com/billing/linkedaccount?project=$PROJECT_ID"
-  echo "  - Then enable APIs: ./gcloud.sh services enable compute.googleapis.com"
-fi

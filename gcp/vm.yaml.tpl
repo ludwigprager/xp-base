@@ -28,3 +28,8 @@ spec:
   providerConfigRef:
     name: default
 
+  managementPolicies:
+    - Observe
+    - Update        # Allow Crossplane to manage after adoption
+    # - LateInitialize (default) if needed
+

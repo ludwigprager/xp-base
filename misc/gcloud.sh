@@ -27,5 +27,4 @@ podman run --rm $INTERACTIVE_FLAGS \
     -e CLOUDSDK_CONFIG=/gcloud-home/.config/gcloud \
     -e HOME=/gcloud-home \
     $IMAGE_NAME \
-    gcloud "$@"
-#   gcloud "$@" | tr -d '\r'
+    gcloud "$@" 2>&1 | col -b
