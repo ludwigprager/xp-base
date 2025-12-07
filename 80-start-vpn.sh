@@ -12,7 +12,7 @@ interval=3
 elapsed=0
 
 while (( elapsed < timeout )); do
-    if TAGS=$(gcloud compute instances describe "$GCP_VM_NAME" \
+    if TAGS=$(./misc/gcloud.sh compute instances describe "$GCP_VM_NAME" \
         --project="$CLOUDSDK_CORE_PROJECT" \
         --zone="$GCP_VM_ZONE" \
         --format="get(tags.items)" 2>/dev/null); then
