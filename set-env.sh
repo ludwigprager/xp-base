@@ -37,14 +37,20 @@ export GCP_VM_ZONE=us-west2-c              # Los Angeles
 export GCP_VM_ZONE=us-east4-c              # Ashburn, Virginia
 export GCP_VM_ZONE=asia-south2-a           # Delhi
 
-GCP_PROJECT_NAME=neptun
-export GCP_VM_ZONE=asia-south2-a           # Delhi
 
-GCP_PROJECT_NAME=vpnx
+
+export GCP_PROJECT_NAME=xvpn1
+export GCP_VM_ZONE=asia-east1-a            # Taiwan
+
+export GCP_PROJECT_NAME=xvpn2
+export GCP_VM_ZONE=southamerica-west1-c    # Santiago de Chile
+
+export GCP_PROJECT_NAME=xvpn0
 export GCP_VM_ZONE=us-central1-a           # Iowa
 
+export GCP_PROJECT_NAME=neptun
+export GCP_VM_ZONE=asia-south2-a           # Delhi
 
-# kind settings
+export GCP_PROJECT_NAME=antex-01
+export GCP_VM_ZONE=me-west1-b              # Tel Aviv
 
-CLUSTER="cb-$(whoami)"
-CLUSTER="cb-${GCP_PROJECT_NAME}"

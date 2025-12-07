@@ -75,3 +75,18 @@ kubectl run -i --tty --rm testpod --image=busybox --restart=Never -- nslookup re
     --source-ranges=0.0.0.0/0
 
 ./misc/gcloud.sh compute instances add-tags wg-vm --tags=wireguard-server --zone=us-central1-a
+
+---
+
+# List all service accounts in the project
+./gcloud.sh iam service-accounts list
+
+# List keys for a specific service account (replace with actual email from above)
+./gcloud.sh iam service-accounts keys list --iam-account=SERVICE_ACCOUNT_EMAIL
+
+# Or get keys for ALL service accounts in one go:
+for SA in $(./gcloud.sh iam service-accounts list --format="value(email)"); do
+  echo "=== Keys for $SA ==="
+  ./gcloud.sh iam service-accounts keys list --iam-account="$SA"
+  echo ""
+done

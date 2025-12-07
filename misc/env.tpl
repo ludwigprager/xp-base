@@ -19,3 +19,8 @@ export KUBECONFIG=$XP_BASE_ROOT/kubeconfig
 #PATH=$XP_BASE_ROOT/functions-demo/go-local/bin/:$PATH
 
 HOSTNAME=${HOSTNAME}.g1
+
+# kind settings
+
+CLUSTER="cb-$(whoami)"
+CLUSTER="cb-${GCP_PROJECT_NAME}"
