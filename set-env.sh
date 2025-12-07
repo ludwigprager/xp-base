@@ -1,5 +1,5 @@
 
-CLUSTER="cb-$(whoami)"
+
 #PS1="[xp-base ${GCB:-undefined} ]\$ "
 #PS1="[xp-base]\$ "
 
@@ -15,7 +15,6 @@ REGISTRY_FQDN=registry.g1
 
 # GCP settings
 # GCP project
-GCP_PROJECT_NAME=neptun
 export CLOUDSDK_CORE_PROJECT=
 
 # GCP service account
@@ -37,3 +36,15 @@ export GCP_VM_ZONE=me-central1-c           # Doha, Qatar
 export GCP_VM_ZONE=us-west2-c              # Los Angeles
 export GCP_VM_ZONE=us-east4-c              # Ashburn, Virginia
 export GCP_VM_ZONE=asia-south2-a           # Delhi
+
+GCP_PROJECT_NAME=neptun
+export GCP_VM_ZONE=asia-south2-a           # Delhi
+
+GCP_PROJECT_NAME=vpnx
+export GCP_VM_ZONE=us-central1-a           # Iowa
+
+
+# kind settings
+
+CLUSTER="cb-$(whoami)"
+CLUSTER="cb-${GCP_PROJECT_NAME}"
