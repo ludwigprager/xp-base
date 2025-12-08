@@ -19,7 +19,7 @@ echo "VM address: ${ADDRESS}"
 # Vault path for the WireGuard YAML
 WG_SECRET_PATH="wg-config/${GCP_VM_NAME}.wg.yaml"
 LOCAL_FILE="${GCP_VM_NAME}.wg.yaml"
-REMOTE_FILE="wireguard-container/wg.yaml"
+REMOTE_FILE="wg.yaml"
 
 # Check if Vault is accessible
 if [[ -n "${VAULT_ADDR:-}" ]]; then
@@ -47,8 +47,9 @@ if [[ -n "${VAULT_ADDR:-}" ]]; then
         # Optionally remove local file
         # rm -f "$LOCAL_FILE"
     else
-        echo "Error: wg.yaml for ${GCP_VM_NAME} not found in Vault"
-        exit 1
+        echo "⚠ wg.yaml for ${GCP_VM_NAME} not found in Vault"
+        echo "Run send-wg-conf-from-vm-to-vault.sh first to store the config"
+        exit 0
     fi
 else
     echo "Error: VAULT_ADDR not set"
