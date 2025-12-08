@@ -48,6 +48,21 @@ done
 #    --zone=${GCP_VM_ZONE}
 #fi
 
+echo "Waiting for ${GCP_VM_NAME} external IP..."
+
+# Wait for Ready condition
+kubectl wait --for=condition=Ready instances/${GCP_VM_NAME} --timeout=600s
+
+# Poll until address exists
+until ADDRESS=$(kubectl get instances ${GCP_VM_NAME} -o json | \
+  jq -r '.status.atProvider.networkInterface[0].accessConfig[0].natIp // empty' 2>/dev/null) && \
+  [ -n "$ADDRESS" ] && [ "$ADDRESS" != "null" ]; do
+  echo "Waiting for external IP..."
+  sleep 5
+done
+
+echo "External IP: $ADDRESS"
+
 
 echo "Copying script to VM and executing"
 ADDRESS=$(kubectl get instances ${GCP_VM_NAME} -o json | jq -r .status.atProvider.networkInterface[0].accessConfig[].natIp)
@@ -60,6 +75,10 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
+
+DEST=qr/${GCP_VM_ZONE}-${GCP_VM_NAME}
+mkdir -p $DEST
+rsync -Pav -e "ssh -F misc/ssh-config -i id_ed25519_crossplane" ${VM_USER}@${ADDRESS}:wireguard-container/config-files/*.png $DEST/
 
 
 URL="http://$ADDRESS/client-1.conf.png"
