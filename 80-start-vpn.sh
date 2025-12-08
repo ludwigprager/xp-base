@@ -68,12 +68,17 @@ echo "Copying script to VM and executing"
 ADDRESS=$(kubectl get instances ${GCP_VM_NAME} -o json | jq -r .status.atProvider.networkInterface[0].accessConfig[].natIp)
 scp -F misc/ssh-config -i ${SSH_KEY_NAME} misc/start-vpn.sh ${VM_USER}@$ADDRESS:
 
+./send-wg-conf-from-vault-to-vm.sh
+
 ./ssh-to-vm.sh bash -x ./start-vpn.sh $VM_USER
 
 if [[ $? -ne 0 ]]; then
     echo "Remote setup failed!"
     exit 1
 fi
+
+# in case this was the first run and wireguard created a conf:
+./send-wg-conf-from-vm-to-vault.sh
 
 
 DEST=qr/${GCP_VM_ZONE}-${GCP_VM_NAME}

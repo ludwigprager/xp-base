@@ -5,5 +5,5 @@ host *.*.*.*
 #SSH_KEY_NAME="id_ed25519_crossplane"
 
 # TODO: tpl
-    User user1
-    IdentityFile $XP_BASE_ROOT/id_ed25519_crossplane
+#    User user1
+#    IdentityFile $XP_BASE_ROOT/id_ed25519_crossplane

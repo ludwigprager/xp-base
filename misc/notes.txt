@@ -93,16 +93,86 @@ done
 
 # ---
 
-kubectl describe instances.compute.gcp.upbound.io vpn0
+kubectl describe instances.compute.gcp.upbound.io $GCP_VM_NAME
 
 # Check Crossplane resource status
-kubectl get instances.compute.gcp.upbound.io vpn0
+kubectl get instances.compute.gcp.upbound.io $GCP_VM_NAME
 
 # Check detailed status
-kubectl describe instances.compute.gcp.upbound.io vpn0
+kubectl describe instances.compute.gcp.upbound.io $GCP_VM_NAME
 
 # Verify VM in GCP
-./misc/gcloud.sh compute instances list --filter="name=vpn0"
+./misc/gcloud.sh compute instances list --filter="name=$GCP_VM_NAME"
 
 # Check if it's running
-./misc/gcloud.sh compute instances describe vpn0 --zone=${GCP_VM_ZONE} --format="get(status)"
+./misc/gcloud.sh compute instances describe $GCP_VM_NAME --zone=${GCP_VM_ZONE} --format="get(status)"
+
+ADDRESS=$(kubectl get instances ${GCP_VM_NAME} -o json | jq -r .status.atProvider.networkInterface[0].accessConfig[].natIp)
+nmap -sU -p 51820 $ADDRESS
+nc -zuv $ADDRESS 51820
+
+
+---
+
+./ssh-to-vm.sh docker exec wireguard wg show all dump
+./ssh-to-vm.sh watch -n 1 'docker exec wireguard wg show'
+
+
+---
+
+vault secrets enable -path=ssh_keys kv-v2
+vault kv put ssh_keys/$GCP_VM_NAME \
+    private_key="$(cat  $XP_BASE_ROOT/id_ed25519_crossplane)" \
+    public_key="$(cat  $XP_BASE_ROOT/id_ed25519_crossplane.pub)"
+
+---
+
+#!/bin/bash
+set -euo pipefail
+
+BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $BASEDIR
+
+source .env
+#VAULT_PATH="${VAULT_PATH:-ssh_keys/mykey}"
+
+# Generate key if it does not exist
+if [[ ! -f "$SSH_KEY_NAME" ]]; then
+    ssh-keygen -t ed25519 -f "$SSH_KEY_NAME" -C "crossplane" -N ""
+fi
+
+# Read keys into variables
+PRIVATE_KEY=$(<"$SSH_KEY_NAME")
+PUBLIC_KEY=$(<"${SSH_KEY_NAME}.pub")
+
+# Store keys in Vault
+vault kv put "$VAULT_PATH" private_key="$PRIVATE_KEY" public_key="$PUBLIC_KEY"
+
+---
+
+vault secrets list
+
+---
+
+if diff <(ssh-keygen -y -f id_ed25519_crossplane) id_ed25519_crossplane.pub >/dev/null; then
+    echo "Keys match"
+else
+    echo "Keys do NOT match"
+fi
+
+---
+
+# Permanently delete all versions and metadata
+vault kv metadata delete ssh_keys/vpn0
+
+# Verify it's gone
+vault kv list ssh_keys
+
+
+---
+
+	# Permanently delete all versions and metadata
+vault kv metadata delete wg-config/vpn0.wg.yaml
+
+# Verify it's gone
+vault kv list wg-config

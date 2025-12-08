@@ -52,11 +52,12 @@ export GCP_VM_ZONE=us-central1-a           # Iowa
 export GCP_PROJECT_NAME=neptun
 
 
-export GCP_VM_NAME="vpn0"
-export GCP_VM_ZONE=us-central1-a           # Iowa
+export GCP_VM_NAME="vpn1"
+export GCP_VM_ZONE=asia-south2-a           # Delhi
 
 export GCP_VM_NAME="vpn2"
 export GCP_VM_ZONE=asia-east1-a            # Taiwan
 
-export GCP_VM_NAME="vpn1"
-export GCP_VM_ZONE=asia-south2-a           # Delhi
+export GCP_VM_NAME="vpn0"
+export GCP_VM_ZONE=us-central1-a           # Iowa
+

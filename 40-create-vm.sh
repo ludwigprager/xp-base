@@ -15,6 +15,7 @@ export BUCKETNAME=$(cat ./bucketname.txt)
 #envsubst < gcp/bucket.yaml.tpl | ./bin/kubectl apply -f -
 
 
+: '
 # Check if ssh key already exists
 if [[ ! -f "$SSH_KEY_NAME" ]]; then
   echo "creating ssh key $SSH_KEY_NAME"
@@ -27,6 +28,24 @@ if [[ ! -f "$SSH_KEY_NAME" ]]; then
   echo "Public key:  $SSH_KEY_NAME.pub"
 
 fi
+'
+
+#SSH_KEY_NAME="${SSH_KEY_NAME:-$HOME/.ssh/id_crossplane}"
+VAULT_PATH="${VAULT_PATH:-ssh_keys/mykey}"
+
+#if [[ -n "${VAULT_ADDR:-}" ]]; then
+#    echo "Retrieving keys from Vault"
+#    vault kv get -field=private_key "$VAULT_PATH" > "$SSH_KEY_NAME"
+#    vault kv get -field=public_key "$VAULT_PATH" > "${SSH_KEY_NAME}.pub"
+#    chmod 600 "$SSH_KEY_NAME"
+#else
+#    # Check if key exists, otherwise generate
+#    if [[ ! -f "$SSH_KEY_NAME" ]]; then
+#        ssh-keygen -t ed25519 -f "$SSH_KEY_NAME" -C "crossplane" -N ""
+#    fi
+#fi
+
+./retrieve-or-gen-key.sh
 
 echo "Waiting before creating a VM"
 

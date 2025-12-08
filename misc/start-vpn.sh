@@ -35,6 +35,8 @@ if [[ ! -d wireguard-container ]]; then
   git clone --branch v1.0.1 https://github.com/ludwigprager/wireguard-container.git
 fi
 
+cp ~/wg.yaml-from-vault wireguard-container/wg.yaml
+
 sudo apt -y install wireguard wireguard-tools
 echo "Creating wg server config"
 ./wireguard-container/create-server-config.sh 150
