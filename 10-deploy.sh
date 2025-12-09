@@ -4,7 +4,7 @@ set -eu
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $BASEDIR
 
-GCP_VM_NAME=${1:-vpn1}
+GCP_VM_NAME=${1:-vpn0}
 
 
 case "$GCP_VM_NAME" in
