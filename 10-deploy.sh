@@ -4,6 +4,15 @@ set -eu
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $BASEDIR
 
+usage() {
+  echo "Usage: $0 <vpn>"
+  echo "Usage: $0 [vpn0 | vpn1 | vpn2]
+  echo ""
+  echo "Examples:"
+  echo "  $0 'vpn0'
+  exit 1
+}
+
 GCP_VM_NAME=${1:-vpn0}
 
 
@@ -19,7 +28,7 @@ case "$GCP_VM_NAME" in
     ;;
   *)
     echo "Unknown VM name: $GCP_VM_NAME"
-    exit 1
+    usage
     ;;
 esac
 
