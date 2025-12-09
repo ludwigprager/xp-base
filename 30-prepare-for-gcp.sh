@@ -81,7 +81,21 @@ echo "Granting storage.admin role to sa"
 
 JSON_FILE="gcp-credentials.json"
 
-# 4. Create and download the JSON key
+OLDEST_KEY=$(./misc/gcloud.sh iam service-accounts keys list \
+  --iam-account="${SA_EMAIL}" \
+  --format="value(name)" \
+  --filter="keyType=USER_MANAGED" \
+  --sort-by="validAfterTime" \
+  --limit=1)
+
+if [ ! -z "$OLDEST_KEY" ]; then
+  # Extract just the key ID from the full resource name
+  KEY_ID=$(basename "$OLDEST_KEY")
+  ./misc/gcloud.sh iam service-accounts keys delete "$KEY_ID" \
+    --iam-account="${SA_EMAIL}" --quiet
+fi
+
+# Now create the new key
 ./misc/gcloud.sh iam service-accounts keys create /workspace/${JSON_FILE} \
   --iam-account="${SA_EMAIL}"
 

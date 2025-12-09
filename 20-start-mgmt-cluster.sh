@@ -39,7 +39,9 @@ export XP_BASE_ROOT=$(git rev-parse --show-toplevel)
 export HOSTNAME=$(hostname)
 export HOST_IP=$(ip addr show docker0 | grep -Po 'inet \K[\d.]+')
 
-envsubst < ./misc/env.tpl > .env
+source zone-and-name.sh
+cat zone-and-name.sh > .env
+envsubst < ./misc/env.tpl >> .env
 cat set-env.sh >> .env
 cat misc/utils.sh >> .env
 source .env

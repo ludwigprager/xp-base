@@ -39,3 +39,5 @@ id_ed25519_crossplane
 id_ed25519_crossplane.pub
 
 qr/
+
+zone-and-name.sh

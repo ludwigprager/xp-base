@@ -52,14 +52,14 @@ SSH_KEY_NAME="id_ed25519_crossplane"
 export GCP_PROJECT_NAME=neptun
 
 
-export GCP_VM_NAME="vpn0"
-export GCP_VM_ZONE=us-central1-a           # Iowa
+#export GCP_VM_NAME="vpn0"
+#export GCP_VM_ZONE=us-central1-a           # Iowa
 
-export GCP_VM_NAME="vpn1"
-export GCP_VM_ZONE=asia-south2-a           # Delhi
+#export GCP_VM_NAME="vpn1"
+#export GCP_VM_ZONE=asia-south2-a           # Delhi
 
-export GCP_VM_NAME="vpn2"
-export GCP_VM_ZONE=asia-east1-a            # Taiwan
+#export GCP_VM_NAME="vpn2"
+#export GCP_VM_ZONE=asia-east1-a            # Taiwan
 
 
-export GCP_VM_REGION=${GCP_VM_ZONE%-*}  # Strips last '-X' → us-central1
+#export GCP_VM_REGION=${GCP_VM_ZONE%-*}  # Strips last '-X' → us-central1

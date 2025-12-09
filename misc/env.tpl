@@ -26,3 +26,5 @@ HOSTNAME=${HOSTNAME}.g1
 
 CLUSTER="cb-$(whoami)"
 CLUSTER="cb-${GCP_PROJECT_NAME}"
+
+export GCP_VM_REGION=${GCP_VM_ZONE%-*}  # Strips last '-X' → us-central1
