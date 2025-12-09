@@ -83,7 +83,7 @@ fi
 
 DEST=qr/${GCP_VM_ZONE}-${GCP_VM_NAME}
 mkdir -p $DEST
-rsync -Pav -e "ssh -F misc/ssh-config -i id_ed25519_crossplane" ${VM_USER}@${ADDRESS}:wireguard-container/config-files/*.png $DEST/
+rsync -Pav -e "ssh -F misc/ssh-config -i id_ed25519_crossplane" ${VM_USER}@${ADDRESS}:wireguard-container/config-files/*.{png,conf} $DEST/
 
 
 URL="http://$ADDRESS/client-1.conf.png"

@@ -6,6 +6,6 @@ cd $BASEDIR
 
 ./20-start-mgmt-cluster.sh
 ./30-prepare-for-gcp.sh 
-bash -x ./40-create-vm.sh
+./40-create-vm.sh
 ./50-xp-function.sh
-bash -x ./80-start-vpn.sh
+./80-start-vpn.sh

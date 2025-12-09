@@ -176,3 +176,10 @@ vault kv metadata delete wg-config/vpn0.wg.yaml
 
 # Verify it's gone
 vault kv list wg-config
+vault kv delete wg-config/vpn2.wg.yaml
+
+
+---
+
+k delete  instances.compute.gcp.upbound.io -n crossplane-system vpn2 
+

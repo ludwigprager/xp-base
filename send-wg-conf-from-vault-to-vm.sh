@@ -7,7 +7,9 @@ source .env  # should define VAULT_TOKEN, VAULT_ADDR, GCP_VM_NAME, VM_USER, SSH_
 
 # Get VM address
 echo "Getting VM address for ${GCP_VM_NAME}..."
-ADDRESS=$(kubectl get instances "${GCP_VM_NAME}" -o json | jq -r '.status.atProvider.networkInterface[0].accessConfig[].natIp')
+#ADDRESS=$(kubectl get instances "${GCP_VM_NAME}" -o json | jq -r '.status.atProvider.networkInterface[0].accessConfig[].natIp')
+ADDRESS=$(kubectl get address ${GCP_VM_ZONE}-0 -o jsonpath='{.status.atProvider.address}')
+
 
 if [[ -z "$ADDRESS" || "$ADDRESS" == "null" ]]; then
     echo "Error: Could not get VM address"
@@ -37,7 +39,9 @@ if [[ -n "${VAULT_ADDR:-}" ]]; then
         
         # Update the Endpoint IP address in the WireGuard config
         echo "Updating Endpoint IP to ${ADDRESS}..."
-        sed -i "s/^Endpoint = [0-9.]*:/Endpoint = ${ADDRESS}:/" "$LOCAL_FILE"
+	sed -i "s/^  host: [0-9.]*/  host: ${ADDRESS}/" "$LOCAL_FILE"
+
+
         
         # Copy to remote VM with SSH key
         scp -F misc/ssh-config -i "${SSH_KEY_NAME}" "$LOCAL_FILE" "${VM_USER}@${ADDRESS}:${REMOTE_FILE}"
