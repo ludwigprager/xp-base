@@ -153,6 +153,20 @@ echo "Ready to apply resources"
 
 
 
+envsubst < gcp/static-ip.yaml.tpl | ./bin/kubectl apply -f -
+
+echo "Step 2: Waiting for static IP to be ready..."
+kubectl wait --for=condition=Ready address/${GCP_VM_ZONE}-0 --timeout=120s
+
+echo "Step 3: Getting static IP address..."
+export STATIC_IP=$(kubectl get address ${GCP_VM_ZONE}-0 -o jsonpath='{.status.atProvider.address}')
+echo "Static IP: ${STATIC_IP}"
+
+if [ -z "$STATIC_IP" ]; then
+  echo "Error: Could not retrieve static IP"
+  exit 1
+fi
+
 envsubst < gcp/vm.yaml.tpl | ./bin/kubectl apply -f -
 envsubst < gcp/network.yaml.tpl | ./bin/kubectl apply -f -
 
