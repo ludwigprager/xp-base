@@ -12,3 +12,7 @@ source .env
 ./xp-function/function-xbuckets-py/build-and-push.sh
 
 ./xp-function/function-xbuckets-go/start-server-and-run-render.sh
+
+echo
+echo
+echo "All Tests Passed"

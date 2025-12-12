@@ -23,6 +23,6 @@ HOSTNAME=${HOSTNAME}.g1
 
 CLUSTER="xp-base-$(whoami)"
 
-GCP_VM_ZONE="us-central1-a"
+export GCP_VM_ZONE="us-central1-a"
 
-#GCP_VM_NAME=xp-base
+export GCP_VM_NAME=xp-base

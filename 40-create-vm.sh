@@ -124,5 +124,4 @@ echo "Ready to apply resources"
 
 
 envsubst < gcp/vm.yaml.tpl | ./bin/kubectl apply -f -
-envsubst < gcp/network.yaml.tpl | ./bin/kubectl apply -f -
 
