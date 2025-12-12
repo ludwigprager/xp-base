@@ -14,38 +14,7 @@ export BUCKETNAME=$(cat ./bucketname.txt)
 
 #envsubst < gcp/bucket.yaml.tpl | ./bin/kubectl apply -f -
 
-
-: '
-# Check if ssh key already exists
-if [[ ! -f "$SSH_KEY_NAME" ]]; then
-  echo "creating ssh key $SSH_KEY_NAME"
-
-  # Generate the key pair
-  ssh-keygen -t ed25519 -f "$SSH_KEY_NAME" -C "crossplane" -N ""
-
-  echo "SSH key pair generated:"
-  echo "Private key: $SSH_KEY_NAME"
-  echo "Public key:  $SSH_KEY_NAME.pub"
-
-fi
-'
-
-#SSH_KEY_NAME="${SSH_KEY_NAME:-$HOME/.ssh/id_crossplane}"
-VAULT_PATH="${VAULT_PATH:-ssh_keys/mykey}"
-
-#if [[ -n "${VAULT_ADDR:-}" ]]; then
-#    echo "Retrieving keys from Vault"
-#    vault kv get -field=private_key "$VAULT_PATH" > "$SSH_KEY_NAME"
-#    vault kv get -field=public_key "$VAULT_PATH" > "${SSH_KEY_NAME}.pub"
-#    chmod 600 "$SSH_KEY_NAME"
-#else
-#    # Check if key exists, otherwise generate
-#    if [[ ! -f "$SSH_KEY_NAME" ]]; then
-#        ssh-keygen -t ed25519 -f "$SSH_KEY_NAME" -C "crossplane" -N ""
-#    fi
-#fi
-
-./retrieve-or-gen-key.sh
+./gen-ssh-key.sh
 
 echo "Waiting before creating a VM"
 
@@ -153,19 +122,6 @@ echo "Ready to apply resources"
 
 
 
-envsubst < gcp/static-ip.yaml.tpl | ./bin/kubectl apply -f -
-
-echo "Step 2: Waiting for static IP to be ready..."
-kubectl wait --for=condition=Ready address/${GCP_VM_ZONE}-0 --timeout=120s
-
-echo "Step 3: Getting static IP address..."
-export STATIC_IP=$(kubectl get address ${GCP_VM_ZONE}-0 -o jsonpath='{.status.atProvider.address}')
-echo "Static IP: ${STATIC_IP}"
-
-if [ -z "$STATIC_IP" ]; then
-  echo "Error: Could not retrieve static IP"
-  exit 1
-fi
 
 envsubst < gcp/vm.yaml.tpl | ./bin/kubectl apply -f -
 envsubst < gcp/network.yaml.tpl | ./bin/kubectl apply -f -

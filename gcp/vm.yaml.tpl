@@ -15,9 +15,10 @@ spec:
         image: debian-cloud/debian-12
     networkInterface:
       - network: default
-        accessConfig:
-          - natIp: "${STATIC_IP}"              # ← Use the actual IP string
-            networkTier: STANDARD              # ← ADD THIS: must match the Address
+# uncomment for static IPs
+#       accessConfig:
+#         - natIp: "${STATIC_IP}"              # ← Use the actual IP string
+#           networkTier: STANDARD              # ← ADD THIS: must match the Address
 
     tags:
       - wireguard-server
